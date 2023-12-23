@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:taskplus/screens/loginScreen.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -7,7 +7,6 @@ class DrawerMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Box _boxLogin = Hive.box("login");
     return Drawer(
       child: Column(
         children: [
@@ -77,8 +76,6 @@ class DrawerMenu extends StatelessWidget {
             ),
             title: const Text('Logout'),
             onTap: () {
-              _boxLogin.clear();
-              _boxLogin.put("loginStatus", false);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
