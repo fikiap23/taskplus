@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:taskplus/screens/homeScreen.dart';
 
-import 'homeScreen.dart';
 import 'signupScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     if (_boxLogin.get("loginStatus") ?? false) {
-      return HomeScreen();
+      return const HomeScreen();
     }
 
     return Scaffold(
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return HomeScreen();
+                              return const HomeScreen();
                             },
                           ),
                         );

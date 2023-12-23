@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/ui/loginScreen.dart';
+import 'package:taskplus/screens/loginScreen.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
