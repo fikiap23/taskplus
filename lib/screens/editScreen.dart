@@ -27,7 +27,7 @@ class _EditScreenState extends State<EditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      // backgroundColor: Colors.grey.shade900,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(children: [
@@ -43,7 +43,7 @@ class _EditScreenState extends State<EditScreen> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                        color: Colors.grey.shade800.withOpacity(.8),
+                        color: Color(0xFF4B6AAB),
                         borderRadius: BorderRadius.circular(10)),
                     child: const Icon(
                       Icons.arrow_back_ios_new,
@@ -63,6 +63,7 @@ class _EditScreenState extends State<EditScreen> {
                     hintText: 'Title',
                     hintStyle: TextStyle(color: Colors.grey, fontSize: 30)),
               ),
+              Divider(),
               TextField(
                 controller: _contentController,
                 style: const TextStyle(
@@ -86,7 +87,7 @@ class _EditScreenState extends State<EditScreen> {
               context, [_titleController.text, _contentController.text]);
         },
         elevation: 10,
-        backgroundColor: Colors.grey.shade800,
+        backgroundColor: Color(0xFF4B6AAB),
         child: const Icon(Icons.save),
       ),
     );

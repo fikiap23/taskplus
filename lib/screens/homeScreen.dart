@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                          color: Colors.grey.shade700.withOpacity(.8),
+                          color: Color(0xFF4B6AAB),
                           borderRadius: BorderRadius.circular(10)),
                       child: const Icon(
                         Icons.sort,
@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Icons.search,
                   color: Colors.white,
                 ),
-                fillColor: Colors.grey.shade700,
+                fillColor: Color(0xFF4B6AAB),
                 filled: true,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -236,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
         elevation: 10,
-        backgroundColor: Colors.grey.shade800,
+        backgroundColor: Color(0xFF4B6AAB),
         child: const Icon(
           Icons.add,
           size: 38,
