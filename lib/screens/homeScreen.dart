@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:taskplus/models/noteModel.dart';
 import 'package:taskplus/constants/colors.dart';
 import 'package:taskplus/screens/editScreen.dart';
+import 'package:taskplus/widgets/drawerMenu.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -62,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.grey.shade900,
+      drawer: const DrawerMenu(),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
         child: Column(
