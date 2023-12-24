@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:taskplus/screens/loginScreen.dart';
+import 'package:taskplus/screens/Home/HomeScreen.dart';
+import 'package:taskplus/screens/Notes/notesScreen.dart';
+
+import 'package:taskplus/screens/Auth/loginScreen.dart';
+import 'package:taskplus/screens/Profile/editProfile.dart';
+
+import 'package:taskplus/screens/Tasks/TasksPage.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    final Box _boxLogin = Hive.box("login");
     return Drawer(
       child: Column(
         children: [
@@ -29,7 +33,10 @@ class DrawerMenu extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  currentAccountPicture: FlutterLogo(),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Color(0xFF4B6AAB),
+                    child: Image(image: AssetImage('assets/images/user.png')),
+                  ),
                 ),
                 ListTile(
                   leading: Icon(
@@ -38,6 +45,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Home'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -47,6 +58,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Tasks'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TasksPage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -56,6 +71,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Notes'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotesScreen()),
+                    );
                   },
                 ),
                 ListTile(
@@ -65,6 +84,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Settings'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditProfile()),
+                    );
                   },
                 ),
               ],
@@ -77,8 +100,6 @@ class DrawerMenu extends StatelessWidget {
             ),
             title: const Text('Logout'),
             onTap: () {
-              _boxLogin.clear();
-              _boxLogin.put("loginStatus", false);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -20,7 +19,6 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _controllerConFirmPassword =
       TextEditingController();
 
-  final Box _boxAccounts = Hive.box("accounts");
   bool _obscurePassword = true;
 
   @override
@@ -59,10 +57,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter username.";
-                  } else if (_boxAccounts.containsKey(value)) {
-                    return "Username is already registered.";
                   }
-
                   return null;
                 },
                 onEditingComplete: () => _focusNodeEmail.requestFocus(),
@@ -174,11 +169,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
-                        _boxAccounts.put(
-                          _controllerUsername.text,
-                          _controllerConFirmPassword.text,
-                        );
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             width: 200,

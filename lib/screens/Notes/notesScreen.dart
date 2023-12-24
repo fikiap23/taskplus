@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/models/noteModel.dart';
-import 'package:taskplus/constants/colors.dart';
-import 'package:taskplus/screens/editScreen.dart';
-import 'package:taskplus/widgets/drawerMenu.dart';
+import 'package:taskplus/common/constants/colors.dart';
+import 'package:taskplus/screens/Notes/editNoteScreen.dart';
+import 'package:taskplus/common/widgets/drawerMenu.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class NotesScreen extends StatefulWidget {
+  const NotesScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<NotesScreen> createState() => _NotesScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _NotesScreenState extends State<NotesScreen> {
   List<NoteModel> filteredNotes = [];
   bool sorted = false;
 
@@ -63,9 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.grey.shade900,
+      appBar: AppBar(title: const Text("TaskPlus")),
       drawer: const DrawerMenu(),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         child: Column(
           children: [
             Row(
