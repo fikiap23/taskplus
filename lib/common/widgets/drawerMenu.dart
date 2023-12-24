@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:taskplus/screens/Home/HomeScreen.dart';
+import 'package:taskplus/screens/Notes/notesScreen.dart';
 
-import 'package:taskplus/screens/loginScreen.dart';
+import 'package:taskplus/screens/Auth/loginScreen.dart';
+
+import 'package:taskplus/screens/Tasks/TasksPage.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key});
@@ -37,6 +41,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Home'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -46,6 +54,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Tasks'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => TasksPage()),
+                    );
                   },
                 ),
                 ListTile(
@@ -55,6 +67,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Notes'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotesScreen()),
+                    );
                   },
                 ),
                 ListTile(
