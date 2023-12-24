@@ -25,6 +25,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("TaskPlus")),
       drawer: const DrawerMenu(),
       body: SafeArea(
         child: Container(

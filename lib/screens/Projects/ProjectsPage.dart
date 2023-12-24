@@ -12,6 +12,7 @@ class ProjectsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("TaskPlus")),
       drawer: DrawerMenu(),
       body: SafeArea(
         child: SingleChildScrollView(

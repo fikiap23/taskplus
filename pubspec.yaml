@@ -37,6 +37,7 @@ dependencies:
   intl: ^0.17.0-nullsafety.2
   date_picker_timeline: ^1.2.3
   google_fonts: ^6.1.0
+  image_picker: ^1.0.5
 
 dev_dependencies:
   flutter_test:
