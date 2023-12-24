@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/screens/Home/HomeScreen.dart';
-import 'package:taskplus/screens/Notes/notesScreen.dart';
+import 'package:taskplus/screens/Home/home_screen.dart';
+import 'package:taskplus/screens/Notes/notes_screen.dart';
 
-import 'package:taskplus/screens/Auth/loginScreen.dart';
-import 'package:taskplus/screens/Profile/editProfile.dart';
+import 'package:taskplus/screens/Auth/login_screen.dart';
+import 'package:taskplus/screens/Profile/edit_profile_screen.dart';
 
-import 'package:taskplus/screens/Tasks/TasksPage.dart';
+import 'package:taskplus/screens/Tasks/tasks_screen.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key});

@@ -2,9 +2,9 @@ import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:taskplus/screens/AddNewTask/AddNewTask.dart';
-import 'package:taskplus/common/widgets/drawerMenu.dart';
-import '../Projects/ProgressCard.dart';
+import 'package:taskplus/screens/AddNewTask/add_new_task_screeen.dart';
+import 'package:taskplus/common/widgets/drawer_menu.dart';
+import '../Projects/progress_card.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);

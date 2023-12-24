@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:taskplus/screens/Projects/OverviewScroll.dart';
-import 'package:taskplus/screens/Projects/ProgressCard.dart';
-import 'package:taskplus/common/widgets/drawerMenu.dart';
+import 'package:taskplus/screens/Projects/overview_scroll.dart';
+import 'package:taskplus/screens/Projects/progress_card.dart';
+import 'package:taskplus/common/widgets/drawer_menu.dart';
 
 class ProjectsPage extends StatelessWidget {
   const ProjectsPage({

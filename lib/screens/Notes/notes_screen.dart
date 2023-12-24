@@ -2,10 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:taskplus/models/noteModel.dart';
+import 'package:taskplus/models/note_model.dart';
 import 'package:taskplus/common/constants/colors.dart';
-import 'package:taskplus/screens/Notes/editNoteScreen.dart';
-import 'package:taskplus/common/widgets/drawerMenu.dart';
+import 'package:taskplus/screens/Notes/edit_note_screen.dart';
+import 'package:taskplus/common/widgets/drawer_menu.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});

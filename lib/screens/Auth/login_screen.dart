@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/screens/Home/HomeScreen.dart';
+import 'package:taskplus/screens/Home/home_screen.dart';
 
-import 'signupScreen.dart';
+import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
