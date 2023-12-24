@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/screens/Notes/notesScreen.dart';
+import 'package:taskplus/screens/Home/HomeScreen.dart';
 
 import 'signupScreen.dart';
 
@@ -112,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const NotesScreen();
+                              return const HomePage();
                             },
                           ),
                         );
