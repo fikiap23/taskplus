@@ -3,6 +3,7 @@ import 'package:taskplus/screens/Home/HomeScreen.dart';
 import 'package:taskplus/screens/Notes/notesScreen.dart';
 
 import 'package:taskplus/screens/Auth/loginScreen.dart';
+import 'package:taskplus/screens/Profile/editProfile.dart';
 
 import 'package:taskplus/screens/Tasks/TasksPage.dart';
 
@@ -32,7 +33,10 @@ class DrawerMenu extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  currentAccountPicture: FlutterLogo(),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: Color(0xFF4B6AAB),
+                    child: Image(image: AssetImage('assets/images/user.png')),
+                  ),
                 ),
                 ListTile(
                   leading: Icon(
@@ -80,6 +84,10 @@ class DrawerMenu extends StatelessWidget {
                   title: const Text('Settings'),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditProfile()),
+                    );
                   },
                 ),
               ],
