@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/screens/Auth/login_screen.dart';
+import 'package:taskplus/screens/Auth/signup_screen.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
+import 'package:taskplus/screens/Notes/notes_screen.dart';
+import 'package:taskplus/screens/Tasks/tasks_screen.dart';
 
 import 'package:taskplus/services/user_data.dart';
 
@@ -71,6 +74,13 @@ class MainApp extends StatelessWidget {
           }
         },
       ),
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignupScreen(),
+        '/tasks': (context) => const TasksPage(),
+        '/notes': (context) => const NotesScreen(),
+      },
     );
   }
 }

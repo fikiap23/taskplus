@@ -68,7 +68,9 @@ class CreateProjectDialog extends StatelessWidget {
                 // Display an error message or perform other actions
               }
 
-              Navigator.of(context).pop(); // Close the dialog
+              Navigator.of(context).pop();
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
             },
             child: Text('Create Subject'),
           ),
