@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskplus/controllers/home_controller.dart';
 import 'package:taskplus/screens/Home/create_project_dialog.dart';
-import 'package:taskplus/screens/Home/overview_scroll.dart';
 import 'package:taskplus/screens/Home/subject_card.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
 
@@ -22,11 +21,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadUserData();
+    _loadSubjectData();
   }
 
   Future<void> _loadUserData() async {
     await _homeController; // Gantilah dengan metode yang sesuai
     setState(() {}); // Memicu pembaharuan UI setelah data dimuat
+  }
+
+  Future<void> _loadSubjectData() async {
+    await _homeController.loadSubjectData();
+    setState(() {});
   }
 
   @override
@@ -83,11 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(
-                      top: 0, bottom: 0, left: 20, right: 0),
-                  child: OverView(),
-                ),
-                Padding(
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,22 +116,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      SubjectCard(
-                        ProjectName: "Subject",
-                        CompletedPercent: 30,
-                      ),
-                      SubjectCard(
-                        ProjectName: "Subject",
-                        CompletedPercent: 30,
-                      ),
-                      SubjectCard(
-                        ProjectName: "Subject",
-                        CompletedPercent: 30,
-                      ),
-                      SubjectCard(
-                        ProjectName: "Subject",
-                        CompletedPercent: 30,
-                      ),
+                      // Loop through subject cards without using ListView.builder
+                      for (int index = 0;
+                          index < (_homeController.subjectData?.length ?? 0);
+                          index++)
+                        SubjectCard(
+                          ProjectName: _homeController.subjectData![index]
+                                  ['name'] ??
+                              'Default Name',
+                          CompletedPercent: 30,
+                        ),
                     ],
                   ),
                 ),
