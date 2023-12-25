@@ -79,4 +79,15 @@ class UserData {
       return null;
     }
   }
+
+  static Future<bool> deleteToken() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_tokenKey);
+      return true;
+    } catch (e) {
+      print('Error deleting token from SharedPreferences: $e');
+      return false;
+    }
+  }
 }

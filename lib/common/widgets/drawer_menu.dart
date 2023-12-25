@@ -126,7 +126,8 @@ class DrawerMenu extends StatelessWidget {
             title: const Text('Logout'),
             onTap: () async {
               bool isLogout = await UserData.deleteUserData();
-              if (isLogout) {
+              bool isToken = await UserData.deleteToken();
+              if (isLogout && isToken) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
