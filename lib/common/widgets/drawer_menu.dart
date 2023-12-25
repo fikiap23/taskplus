@@ -6,6 +6,7 @@ import 'package:taskplus/screens/Auth/login_screen.dart';
 import 'package:taskplus/screens/Profile/edit_profile_screen.dart';
 
 import 'package:taskplus/screens/Tasks/tasks_screen.dart';
+import 'package:taskplus/services/user_data.dart';
 
 class DrawerMenu extends StatelessWidget {
   const DrawerMenu({Key? key});
@@ -100,6 +101,7 @@ class DrawerMenu extends StatelessWidget {
             ),
             title: const Text('Logout'),
             onTap: () {
+              UserData.deleteUserData();
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
