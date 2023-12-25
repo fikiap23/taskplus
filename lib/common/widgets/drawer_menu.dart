@@ -94,22 +94,25 @@ class DrawerMenu extends StatelessWidget {
               ],
             ),
           ),
-          Divider(), // Add a divider for visual separation
+          const Divider(), // Add a divider for visual separation
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.logout,
             ),
             title: const Text('Logout'),
-            onTap: () {
-              UserData.deleteUserData();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const LoginScreen();
-                  },
-                ),
-              );
+            onTap: () async {
+              bool isLogout = await UserData.deleteUserData();
+              if (isLogout) {
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return const LoginScreen();
+                    },
+                  ),
+                );
+              }
             },
           ),
         ],

@@ -51,6 +51,7 @@ class UserData {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove(_userDataKey);
+      // print(await UserData.getUserData());
       return true;
     } catch (e) {
       print('Error deleting user data from SharedPreferences: $e');
