@@ -28,18 +28,7 @@ class _EditProfileState extends State<EditProfile> {
   }
 
   Future<void> _updateProfilePicture() async {
-    // Implement the logic to update the user's profile picture
-    // For example, you can upload the new image to a server or update it in the database
-    // Also, you may want to display a confirmation to the user that the picture has been updated
-
-    // Print the selected image path (for demonstration purposes)
     print("Selected Image Path: $_imagePath");
-
-    // You can add your logic here to save the updated profile picture to the server or database
-    // For example:
-    // await uploadProfilePictureToServer();
-    // or
-    // await updateProfilePictureInDatabase();
   }
 
   Future<void> _showImagePicker(BuildContext context) async {
@@ -83,10 +72,6 @@ class _EditProfileState extends State<EditProfile> {
         actions: [
           IconButton(
             onPressed: () {
-              // Save changes
-              // You can implement the logic to save the changes here
-              // For example, update the user's information in the database
-              // You may also want to navigate back to the profile page after saving
               Navigator.pop(context);
             },
             icon: Icon(Icons.save),
