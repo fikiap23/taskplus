@@ -34,8 +34,9 @@ class _EditProfileState extends State<EditProfile> {
         title: Text("Edit Profile"),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pop(context);
+            onPressed: () async {
+              await _editProfileController.updateProfile();
+              // Navigator.pop(context);
             },
             icon: Icon(Icons.save),
           ),

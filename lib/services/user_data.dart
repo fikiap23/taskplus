@@ -58,4 +58,25 @@ class UserData {
       return false;
     }
   }
+
+  static const String _tokenKey = 'token';
+
+  static Future<void> saveToken(String token) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_tokenKey, token);
+    } catch (e) {
+      print('Error saving token to SharedPreferences: $e');
+    }
+  }
+
+  static Future<String?> getToken() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      return prefs.getString(_tokenKey);
+    } catch (e) {
+      print('Error getting token from SharedPreferences: $e');
+      return null;
+    }
+  }
 }
