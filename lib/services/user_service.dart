@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:taskplus/models/user_model.dart';
 import 'package:taskplus/services/user_data.dart';
 
 class UserService {

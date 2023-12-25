@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:taskplus/services/user_data.dart';
@@ -40,11 +44,6 @@ class EditProfileController {
     }
   }
 
-  Future<void> updateProfilePicture() async {
-    print("Selected Image Path: $imagePath");
-    // Implement logic to update profile picture here
-  }
-
   Future<void> updateProfile() async {
     try {
       // Mengambil data dari controller
@@ -53,8 +52,22 @@ class EditProfileController {
       String email = emailController.text;
       String username = usernameController.text;
       String password = passwordController.text;
-      String profilePic = imagePath ?? profilePictureController.text;
+      String profilePic;
 
+      // Jika imagePath tidak null, gunakan imagePath sebagai profilePic
+      // Jika imagePath null, gunakan nilai dari profilePictureController
+      if (imagePath != null) {
+        // Convert path file ke base64 string
+        File imageFile = File(imagePath!);
+        List<int> imageBytes = await imageFile.readAsBytes();
+        String base64String = base64Encode(imageBytes);
+        // print(base64String);
+        profilePic = base64String;
+      } else {
+        profilePic = profilePictureController.text;
+      }
+
+      print(profilePic);
       // Membuat body request
       final Map<String, dynamic> requestBody = {
         'name': name,
@@ -83,7 +96,6 @@ class EditProfileController {
                 onPressed: () async {
                   await pickImage(ImageSource.camera);
                   Navigator.pop(context);
-                  updateProfilePicture();
                 },
                 child: Text("Camera"),
               ),
@@ -91,7 +103,6 @@ class EditProfileController {
                 onPressed: () async {
                   await pickImage(ImageSource.gallery);
                   Navigator.pop(context);
-                  updateProfilePicture();
                 },
                 child: Text("Gallery"),
               ),
