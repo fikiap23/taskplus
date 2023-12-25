@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
 import 'package:taskplus/services/user_service.dart';
+import 'package:taskplus/services/user_data.dart'; // Import the UserData class
 
 class LoginController {
   final FocusNode focusNodePassword = FocusNode();
@@ -29,6 +30,14 @@ class LoginController {
       if (response != null) {
         // Successful login
         print('Login successful: $response');
+
+        // Save user data to SharedPreferences
+        // Save user data to SharedPreferences
+        await UserData.saveUserData(response);
+
+        // print('User data saved: ${await UserData.getUserDataValue('name')}');
+
+        // Navigate to the home screen
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
