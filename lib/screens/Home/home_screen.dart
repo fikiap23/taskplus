@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskplus/controllers/home_controller.dart';
+import 'package:taskplus/screens/Home/create_project_dialog.dart';
 import 'package:taskplus/screens/Home/overview_scroll.dart';
 import 'package:taskplus/screens/Home/progress_card.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
@@ -91,25 +92,49 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "Progress",
-                        style: GoogleFonts.montserrat(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Progress",
+                            style: GoogleFonts.montserrat(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return CreateProjectDialog();
+                                },
+                              );
+                            },
+                            child: Text("Create Project"),
+                          ),
+                        ],
                       ),
                       ProgressCard(
-                          ProjectName: "Project", CompletedPercent: 30),
+                        ProjectName: "Project",
+                        CompletedPercent: 30,
+                      ),
                       ProgressCard(
-                          ProjectName: "Project", CompletedPercent: 30),
+                        ProjectName: "Project",
+                        CompletedPercent: 30,
+                      ),
                       ProgressCard(
-                          ProjectName: "Project", CompletedPercent: 30),
+                        ProjectName: "Project",
+                        CompletedPercent: 30,
+                      ),
                       ProgressCard(
-                          ProjectName: "Project", CompletedPercent: 30),
+                        ProjectName: "Project",
+                        CompletedPercent: 30,
+                      ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
