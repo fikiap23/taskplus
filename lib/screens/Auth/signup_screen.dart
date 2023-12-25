@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/controllers/signup_contoller.dart';
+import 'package:taskplus/controllers/signup_controller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});

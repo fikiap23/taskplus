@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:taskplus/screens/auth/signup_screen.dart';
 
-import 'package:taskplus/controllers/login_contoller.dart';
+import 'package:taskplus/controllers/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
