@@ -1,7 +1,7 @@
 // login_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:taskplus/screens/Home/home_screen.dart';
+
 import 'package:taskplus/screens/auth/signup_screen.dart';
 
 import 'package:taskplus/controllers/login_contoller.dart';
@@ -41,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 60),
               TextFormField(
                 style: const TextStyle(color: Colors.white),
-                controller: _loginController.controllerUsername,
+                controller: _loginController.controllerIdentifier,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: "Username",
@@ -106,16 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const HomePage();
-                            },
-                          ),
-                        );
+                        await _loginController.loginUser(context);
                       }
                     },
                     child: const Text("Login"),
