@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/screens/Auth/login_screen.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
+
 import 'package:taskplus/services/user_data.dart';
 
 class MainApp extends StatelessWidget {
@@ -55,7 +56,7 @@ class MainApp extends StatelessWidget {
             // Check if user data is available
             if (snapshot.hasData && snapshot.data != null) {
               // User data is present, navigate to the home screen or any other initial screen
-              return const HomePage();
+              return const HomeScreen();
             } else {
               // User data is not present, navigate to the login screen
               return const LoginScreen();

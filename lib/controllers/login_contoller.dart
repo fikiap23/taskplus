@@ -43,7 +43,7 @@ class LoginController {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const HomePage();
+              return const HomeScreen();
             },
           ),
         );

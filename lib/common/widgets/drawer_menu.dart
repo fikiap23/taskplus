@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
+
 import 'package:taskplus/screens/Notes/notes_screen.dart';
 
 import 'package:taskplus/screens/Auth/login_screen.dart';
@@ -48,7 +49,7 @@ class DrawerMenu extends StatelessWidget {
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   },
                 ),
