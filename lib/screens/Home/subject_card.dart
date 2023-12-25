@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProgressCard extends StatelessWidget {
-  ProgressCard(
+class SubjectCard extends StatelessWidget {
+  SubjectCard(
       {Key? key, required this.ProjectName, required this.CompletedPercent})
       : super(key: key);
   late String ProjectName;

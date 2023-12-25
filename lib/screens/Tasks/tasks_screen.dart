@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/screens/AddNewTask/add_new_task_screeen.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
-import '../Home/progress_card.dart';
+import '../Home/subject_card.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -141,19 +141,19 @@ class _TasksPageState extends State<TasksPage> {
                         scrollDirection: Axis.vertical,
                         child: Column(
                           children: [
-                            ProgressCard(
+                            SubjectCard(
                               ProjectName: "Project",
                               CompletedPercent: 30,
                             ),
-                            ProgressCard(
+                            SubjectCard(
                               ProjectName: "Project",
                               CompletedPercent: 30,
                             ),
-                            ProgressCard(
+                            SubjectCard(
                               ProjectName: "Project",
                               CompletedPercent: 30,
                             ),
-                            ProgressCard(
+                            SubjectCard(
                               ProjectName: "Project",
                               CompletedPercent: 30,
                             ),

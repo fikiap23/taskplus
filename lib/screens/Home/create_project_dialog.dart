@@ -1,34 +1,32 @@
-// create_project_dialog.dart
-
 import 'package:flutter/material.dart';
+import 'package:taskplus/services/subject_service.dart';
+// Sesuaikan dengan path yang sesuai
 
 class CreateProjectDialog extends StatelessWidget {
-  final TextEditingController projectNameController = TextEditingController();
-  final TextEditingController projectDescriptionController =
-      TextEditingController();
+  final TextEditingController subjectNameController = TextEditingController();
+  final TextEditingController teacherNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
-        title: Text('Create Project'),
+        title: Text('Create Subject'),
         content: Container(
           width: double.maxFinite,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Project Name:'),
+              Text('Subject Name:'),
               TextField(
-                controller: projectNameController,
-                decoration: InputDecoration(hintText: 'Enter project name'),
+                controller: subjectNameController,
+                decoration: InputDecoration(hintText: 'Enter subject name'),
               ),
               SizedBox(height: 16),
-              Text('Description:'),
+              Text('Teacher:'),
               TextField(
-                controller: projectDescriptionController,
-                decoration:
-                    InputDecoration(hintText: 'Enter project description'),
+                controller: teacherNameController,
+                decoration: InputDecoration(hintText: 'Enter teacher name'),
               ),
             ],
           ),
@@ -41,18 +39,38 @@ class CreateProjectDialog extends StatelessWidget {
             child: Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () {
-              // Implement your logic for creating the project
-              String projectName = projectNameController.text;
-              String projectDescription = projectDescriptionController.text;
+            onPressed: () async {
+              // Implement your logic for creating the subject
+              String subjectName = subjectNameController.text;
+              String teacherName = teacherNameController.text;
 
-              // Process the project details as needed
-              print('Project Name: $projectName');
-              print('Description: $projectDescription');
+              // Create a map with subject details
+              Map<String, dynamic> subjectData = {
+                'name': subjectName,
+                'dosen': teacherName,
+                // Add other subject details as needed
+              };
+
+              // Create an instance of SubjectService
+              SubjectService subjectService = SubjectService();
+
+              // Call the createSubject method
+              Map<String, dynamic>? result =
+                  await subjectService.createSubject(subjectData);
+
+              if (result != null) {
+                // Successful subject creation
+                print('Subject created successfully: $result');
+                // Perform any additional actions or update UI as needed
+              } else {
+                // Handle subject creation failure
+                print('Subject creation failed');
+                // Display an error message or perform other actions
+              }
 
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: Text('Create Project'),
+            child: Text('Create Subject'),
           ),
         ],
       ),

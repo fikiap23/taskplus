@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:taskplus/controllers/home_controller.dart';
 import 'package:taskplus/screens/Home/create_project_dialog.dart';
 import 'package:taskplus/screens/Home/overview_scroll.dart';
-import 'package:taskplus/screens/Home/progress_card.dart';
+import 'package:taskplus/screens/Home/subject_card.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -112,24 +112,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                 },
                               );
                             },
-                            child: Text("Create Project"),
+                            child: Text("Create Subject"),
                           ),
                         ],
                       ),
-                      ProgressCard(
-                        ProjectName: "Project",
+                      SubjectCard(
+                        ProjectName: "Subject",
                         CompletedPercent: 30,
                       ),
-                      ProgressCard(
-                        ProjectName: "Project",
+                      SubjectCard(
+                        ProjectName: "Subject",
                         CompletedPercent: 30,
                       ),
-                      ProgressCard(
-                        ProjectName: "Project",
+                      SubjectCard(
+                        ProjectName: "Subject",
                         CompletedPercent: 30,
                       ),
-                      ProgressCard(
-                        ProjectName: "Project",
+                      SubjectCard(
+                        ProjectName: "Subject",
                         CompletedPercent: 30,
                       ),
                     ],
