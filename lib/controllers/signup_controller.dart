@@ -5,11 +5,13 @@ import 'package:taskplus/screens/Auth/login_screen.dart';
 import 'package:taskplus/services/user_service.dart';
 
 class SignupController {
+  final FocusNode focusNodeName = FocusNode();
   final FocusNode focusNodeUsername = FocusNode();
   final FocusNode focusNodeEmail = FocusNode();
   final FocusNode focusNodePassword = FocusNode();
   final FocusNode focusNodeConfirmPassword = FocusNode();
 
+  final TextEditingController controllerName = TextEditingController();
   final TextEditingController controllerUsername = TextEditingController();
   final TextEditingController controllerEmail = TextEditingController();
   final TextEditingController controllerPassword = TextEditingController();
@@ -20,7 +22,7 @@ class SignupController {
 
   void dispose() {
     focusNodePassword.dispose();
-    // controllerNama.dispose();
+    controllerName.dispose();
     controllerUsername.dispose();
     controllerEmail.dispose();
     controllerPassword.dispose();
@@ -29,7 +31,7 @@ class SignupController {
 
   Future<void> signupUser(BuildContext context) async {
     final requestData = {
-      "name": "tes",
+      "name": controllerName.text,
       "username": controllerUsername.text,
       "email": controllerEmail.text,
       "password": controllerPassword.text,

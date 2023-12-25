@@ -50,7 +50,10 @@ class DrawerMenu extends StatelessWidget {
                         currentAccountPicture: CircleAvatar(
                           backgroundColor: Color(0xFF4B6AAB),
                           child: Image(
-                              image: AssetImage('assets/images/user.png')),
+                              image: snapshot.data!['profilePic'].isNotEmpty
+                                  ? NetworkImage(snapshot.data!['profilePic'])
+                                  : AssetImage('assets/images/user.png')
+                                      as ImageProvider),
                         ),
                       ),
                       ListTile(

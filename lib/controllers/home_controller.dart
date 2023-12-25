@@ -13,7 +13,7 @@ class HomeController {
 
   Future<void> _loadUserData() async {
     userData = await UserData.getUserData() ?? {};
-    print("User data loaded: $userData");
+    // print("User data loaded: $userData");
   }
 
   void dispose() {

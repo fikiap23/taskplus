@@ -36,6 +36,30 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 35),
               TextFormField(
+                controller: _signupController.controllerName,
+                focusNode: _signupController.focusNodeName,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  prefixIcon: const Icon(Icons.person_pin_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter Name.";
+                  }
+                  return null;
+                },
+                onEditingComplete: () =>
+                    _signupController.focusNodeUsername.requestFocus(),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
                 controller: _signupController.controllerUsername,
                 focusNode: _signupController.focusNodeUsername,
                 keyboardType: TextInputType.name,
