@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/services/subject_service.dart';
 
-class CreateProjectDialog extends StatefulWidget {
+class EditSubjectDialog extends StatefulWidget {
+  final String subjectId;
+  final String subjectName;
+  final String teacher;
+
+  EditSubjectDialog(
+      {required this.subjectId,
+      required this.subjectName,
+      required this.teacher});
+
   @override
-  _CreateProjectDialogState createState() => _CreateProjectDialogState();
+  _EditSubjectDialogState createState() => _EditSubjectDialogState();
 }
 
-class _CreateProjectDialogState extends State<CreateProjectDialog> {
+class _EditSubjectDialogState extends State<EditSubjectDialog> {
   final TextEditingController subjectNameController = TextEditingController();
   final TextEditingController teacherNameController = TextEditingController();
   bool isLoading = false;
 
   @override
+  void initState() {
+    subjectNameController.text = widget.subjectName;
+    teacherNameController.text = widget.teacher;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
-        title: Text('Create Subject'),
+        title: Text('Edit Subject'),
         content: Container(
           width: double.maxFinite,
           child: Column(
@@ -33,6 +49,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog> {
                 controller: teacherNameController,
                 decoration: InputDecoration(hintText: 'Enter teacher name'),
               ),
+              // Add other fields as needed
             ],
           ),
         ),
@@ -47,44 +64,37 @@ class _CreateProjectDialogState extends State<CreateProjectDialog> {
             onPressed: isLoading
                 ? null
                 : () async {
-                    // Set loading to true to show the loading indicator
                     setState(() {
                       isLoading = true;
                     });
 
-                    // Implement your logic for creating the subject
                     String subjectName = subjectNameController.text;
                     String teacherName = teacherNameController.text;
 
-                    // Create a map with subject details
-                    Map<String, dynamic> subjectData = {
+                    Map<String, dynamic> updatedSubjectData = {
                       'name': subjectName,
                       'dosen': teacherName,
-                      // Add other subject details as needed
+                      // Add other updated subject details as needed
                     };
 
-                    // Create an instance of SubjectService
                     SubjectService subjectService = SubjectService();
 
                     try {
-                      // Call the createSubject method
-                      Map<String, dynamic>? result =
-                          await subjectService.createSubject(subjectData);
+                      // Call the updateSubject method
+                      bool success = await subjectService.updateSubject(
+                          widget.subjectId, updatedSubjectData);
 
-                      if (result != null) {
-                        // Successful subject creation
-                        print('Subject created successfully: $result');
+                      if (success) {
+                        print('Subject updated successfully');
                         // Perform any additional actions or update UI as needed
                       } else {
-                        // Handle subject creation failure
-                        print('Subject creation failed');
-                        // Display an error message or perform other actions
+                        print('Subject update failed');
+                        // Handle subject update failure
                       }
                     } catch (error) {
-                      print('Error creating subject: $error');
+                      print('Error updating subject: $error');
                       // Handle error, display an error message, or perform other actions
                     } finally {
-                      // Set loading to false to hide the loading indicator
                       setState(() {
                         isLoading = false;
                       });
@@ -103,7 +113,7 @@ class _CreateProjectDialogState extends State<CreateProjectDialog> {
                       strokeWidth: 3,
                     ),
                   )
-                : Text('Create Subject'),
+                : Text('Update Subject'),
           ),
         ],
       ),

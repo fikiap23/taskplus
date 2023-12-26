@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskplus/screens/Home/edit_subject_dialog.dart';
 import 'package:taskplus/services/subject_service.dart';
 
 class SubjectCard extends StatelessWidget {
@@ -90,11 +91,14 @@ class SubjectCard extends StatelessWidget {
       ],
       onSelected: (value) {
         if (value == 0) {
-          // TODO: Implement logic for editing the subject
-          // You can navigate to an edit screen or perform any other actions
-          // ...
-
-          print('Edit selected');
+          // Show EditSubjectDialog when "Edit" is selected
+          showDialog(
+            context: context,
+            builder: (context) => EditSubjectDialog(
+                subjectId: subjectId,
+                subjectName: subjectName,
+                teacher: teacher),
+          );
         } else if (value == 1) {
           _showDeleteConfirmationDialog(context);
         }

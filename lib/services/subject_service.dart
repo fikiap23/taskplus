@@ -93,4 +93,34 @@ class SubjectService {
       return false;
     }
   }
+
+  Future<bool> updateSubject(
+      String subjectId, Map<String, dynamic> updatedData) async {
+    final String apiUrl = '$baseUrl/$subjectId';
+    try {
+      String? token = await UserData.getToken();
+      final http.Response response = await http.put(
+        Uri.parse(apiUrl),
+        body: jsonEncode(updatedData),
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': ' $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Successful subject update
+        print('Subject updated successfully');
+        return true;
+      } else {
+        // Handle error
+        print('Failed to update subject. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } catch (error) {
+      print('Error during update subject request: $error');
+      return false;
+    }
+  }
 }

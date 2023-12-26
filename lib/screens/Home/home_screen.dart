@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskplus/controllers/home_controller.dart';
-import 'package:taskplus/screens/Home/create_project_dialog.dart';
+import 'package:taskplus/screens/Home/create_subject_dialog.dart';
 import 'package:taskplus/screens/Home/subject_card.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
 
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               showDialog(
                                 context: context,
                                 builder: (context) {
-                                  return CreateProjectDialog();
+                                  return CreateSubjectDialog();
                                 },
                               );
                             },
