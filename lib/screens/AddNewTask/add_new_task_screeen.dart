@@ -13,8 +13,8 @@ class AddNewTask extends StatefulWidget {
 class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Titlecontroller;
   late TextEditingController _Datecontroller;
-  late TextEditingController _StartTime;
-  late TextEditingController _EndTime;
+  late TextEditingController _Time;
+
   DateTime SelectedDate = DateTime.now();
 
   final SubjectListWidget subjectListWidget = SubjectListWidget();
@@ -25,12 +25,8 @@ class _AddNewTaskState extends State<AddNewTask> {
     _Titlecontroller = TextEditingController();
     _Datecontroller = TextEditingController(
         text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.SelectedDate)}');
-    _StartTime = TextEditingController(
+    _Time = TextEditingController(
         text: '${DateFormat.jm().format(DateTime.now())}');
-    _EndTime = TextEditingController(
-        text: '${DateFormat.jm().format(DateTime.now().add(
-      Duration(hours: 1),
-    ))}');
   }
 
   _selectDate(BuildContext context) async {
@@ -49,16 +45,12 @@ class _AddNewTaskState extends State<AddNewTask> {
     }
   }
 
-  _selectTime(BuildContext context, String Timetype) async {
+  _selectTime(BuildContext context) async {
     final TimeOfDay? result =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
       setState(() {
-        if (Timetype == "StartTime") {
-          _StartTime.text = result.format(context);
-        } else {
-          _EndTime.text = result.format(context);
-        }
+        _Time.text = result.format(context);
       });
     }
   }
@@ -139,7 +131,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelText: "Date",
+                      labelText: "Dateline",
                       suffixIcon: GestureDetector(
                         onTap: () {
                           _selectDate(context);
@@ -178,74 +170,37 @@ class _AddNewTaskState extends State<AddNewTask> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: TextField(
-                                readOnly: true,
-                                controller: _StartTime,
-                                decoration: InputDecoration(
-                                  labelText: "Date",
-                                  suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      _selectTime(context, "StartTime");
-                                    },
-                                    child: Icon(
-                                      Icons.alarm,
-                                      color: Colors.black26,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  fillColor: Colors.black26,
-                                  labelStyle: GoogleFonts.montserrat(
-                                    color: Colors.black26,
-                                    fontSize: 15,
-                                  ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          child: TextField(
+                            style:
+                                TextStyle(color: Colors.black26, fontSize: 15),
+                            readOnly: true,
+                            controller: _Time,
+                            decoration: InputDecoration(
+                              labelText: "Time",
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  _selectTime(context);
+                                },
+                                child: Icon(
+                                  Icons.alarm,
+                                  color: Colors.black26,
                                 ),
                               ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: TextField(
-                                readOnly: true,
-                                controller: _EndTime,
-                                decoration: InputDecoration(
-                                  labelText: "Date",
-                                  suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      _selectTime(context, "EndTime");
-                                    },
-                                    child: Icon(
-                                      Icons.alarm,
-                                      color: Colors.black26,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  fillColor: Colors.black26,
-                                  labelStyle: GoogleFonts.montserrat(
-                                    color: Colors.black26,
-                                    fontSize: 15,
-                                  ),
-                                ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black26),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black26),
+                              ),
+                              fillColor: Colors.black26,
+                              labelStyle: GoogleFonts.montserrat(
+                                color: Colors.black26,
+                                fontSize: 15,
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -296,19 +251,24 @@ class _AddNewTaskState extends State<AddNewTask> {
                       SizedBox(
                         height: 100,
                       ),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Color.fromRGBO(130, 0, 255, 1),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Create Task",
-                          style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
+                      GestureDetector(
+                        onTap: () {
+                          print(_Datecontroller.text);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color.fromRGBO(130, 0, 255, 1),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Create Task",
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                       )
