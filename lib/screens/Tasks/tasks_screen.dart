@@ -1,10 +1,10 @@
-import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:taskplus/screens/AddNewTask/add_new_task_screeen.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
-import '../Home/subject_card.dart';
+import 'package:taskplus/screens/Tasks/TaskListWidget.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -15,6 +15,11 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   DateTime _selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _onDateChange(DateTime date) {
     setState(() {
@@ -52,9 +57,10 @@ class _TasksPageState extends State<TasksPage> {
                           Text(
                             'My tasks',
                             style: GoogleFonts.montserrat(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500),
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Icon(
                             Icons.search_rounded,
@@ -126,46 +132,7 @@ class _TasksPageState extends State<TasksPage> {
                 ),
                 Container(
                   padding: EdgeInsets.all(25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Task",
-                        style: GoogleFonts.montserrat(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  child: TaskListWidget(),
                 ),
               ],
             ),
