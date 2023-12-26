@@ -116,16 +116,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      // Loop through subject cards without using ListView.builder
-                      for (int index = 0;
-                          index < (_homeController.subjectData?.length ?? 0);
-                          index++)
-                        SubjectCard(
-                          ProjectName: _homeController.subjectData![index]
-                                  ['name'] ??
-                              'Default Name',
-                          CompletedPercent: 30,
-                        ),
+                      // Display loading indicator if subject data is still loading
+                      _homeController.subjectData == null
+                          ? Center(child: CircularProgressIndicator())
+                          : Column(
+                              // Loop through subject cards without using ListView.builder
+                              children: [
+                                for (int index = 0;
+                                    index <
+                                        (_homeController.subjectData?.length ??
+                                            0);
+                                    index++)
+                                  SubjectCard(
+                                    ProjectName: _homeController
+                                            .subjectData![index]['name'] ??
+                                        'Default Name',
+                                    CompletedPercent: 30,
+                                  ),
+                              ],
+                            ),
                     ],
                   ),
                 ),
