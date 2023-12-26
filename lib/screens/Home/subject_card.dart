@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class SubjectCard extends StatelessWidget {
-  SubjectCard(
-      {Key? key, required this.ProjectName, required this.CompletedPercent})
+  SubjectCard({Key? key, required this.subjectName, required this.teacher})
       : super(key: key);
-  late String ProjectName;
-  late int CompletedPercent;
+  late String subjectName;
+  late String teacher;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,15 +13,6 @@ class SubjectCard extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 3.0,
-            margin: EdgeInsets.only(top: 10),
-            height: 49 * 0.01 * this.CompletedPercent,
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 123, 0, 245),
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
           Expanded(
             child: Container(
               height: 70,
@@ -49,7 +39,7 @@ class SubjectCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      this.ProjectName,
+                      this.subjectName,
                       style: GoogleFonts.montserrat(
                         color: Colors.black,
                         fontSize: 15,
@@ -57,7 +47,7 @@ class SubjectCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "2 days ago",
+                      this.teacher,
                       style: GoogleFonts.montserrat(
                         color: Colors.grey,
                         fontSize: 10,

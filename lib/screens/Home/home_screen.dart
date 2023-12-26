@@ -128,11 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             0);
                                     index++)
                                   SubjectCard(
-                                    ProjectName: _homeController
-                                            .subjectData![index]['name'] ??
-                                        'Default Name',
-                                    CompletedPercent: 30,
-                                  ),
+                                      subjectName: _homeController
+                                              .subjectData![index]['name'] ??
+                                          'SubjectName',
+                                      teacher: _homeController
+                                              .subjectData![index]['dosen'] ??
+                                          ''),
                               ],
                             ),
                     ],

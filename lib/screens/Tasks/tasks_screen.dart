@@ -142,20 +142,20 @@ class _TasksPageState extends State<TasksPage> {
                         child: Column(
                           children: [
                             SubjectCard(
-                              ProjectName: "Project",
-                              CompletedPercent: 30,
+                              subjectName: "Project",
+                              teacher: "saha",
                             ),
                             SubjectCard(
-                              ProjectName: "Project",
-                              CompletedPercent: 30,
+                              subjectName: "Project",
+                              teacher: "saha",
                             ),
                             SubjectCard(
-                              ProjectName: "Project",
-                              CompletedPercent: 30,
+                              subjectName: "Project",
+                              teacher: "saha",
                             ),
                             SubjectCard(
-                              ProjectName: "Project",
-                              CompletedPercent: 30,
+                              subjectName: "Project",
+                              teacher: "saha",
                             ),
                           ],
                         ),
