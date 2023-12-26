@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:taskplus/screens/AddNewTask/category_card.dart';
-import 'package:taskplus/services/subject_service.dart';
+import 'package:taskplus/screens/AddNewTask/SubjectList.dart';
 
 class AddNewTask extends StatefulWidget {
   const AddNewTask({Key? key}) : super(key: key);
@@ -12,23 +11,23 @@ class AddNewTask extends StatefulWidget {
 }
 
 class _AddNewTaskState extends State<AddNewTask> {
-  final SubjectService _subjectService = SubjectService();
   late TextEditingController _Titlecontroller;
   late TextEditingController _Datecontroller;
   late TextEditingController _StartTime;
   late TextEditingController _EndTime;
   DateTime SelectedDate = DateTime.now();
-  String _selectedSubject = "";
+
+  final SubjectListWidget subjectListWidget = SubjectListWidget();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _Titlecontroller = new TextEditingController();
-    _Datecontroller = new TextEditingController(
+    _Titlecontroller = TextEditingController();
+    _Datecontroller = TextEditingController(
         text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.SelectedDate)}');
-    _StartTime = new TextEditingController(
+    _StartTime = TextEditingController(
         text: '${DateFormat.jm().format(DateTime.now())}');
-    _EndTime = new TextEditingController(
+    _EndTime = TextEditingController(
         text: '${DateFormat.jm().format(DateTime.now().add(
       Duration(hours: 1),
     ))}');
@@ -62,12 +61,6 @@ class _AddNewTaskState extends State<AddNewTask> {
         }
       });
     }
-  }
-
-  _setSelectSubject(String selectSubject) {
-    this.setState(() {
-      this._selectedSubject = selectSubject;
-    });
   }
 
   @override
@@ -296,47 +289,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 decoration: TextDecoration.none,
                               ),
                             ),
-                            FutureBuilder(
-                              future: _subjectService.getAllNameSubjects(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else {
-                                  // Cast snapshot.data to List<Map<String, dynamic>>
-                                  List<Map<String, dynamic>> subjectList =
-                                      (snapshot.data as List<dynamic>)
-                                          .cast<Map<String, dynamic>>();
-
-                                  // Extract subject names from the list of maps
-                                  List<String> subjectNames = subjectList
-                                      .map((subject) =>
-                                          subject['subjectName'].toString())
-                                      .toList();
-
-                                  return Wrap(
-                                    alignment: WrapAlignment.spaceEvenly,
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.start,
-                                    children: subjectNames.map((subjectName) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          // Implement your logic when a subject is tapped
-                                          _setSelectSubject(subjectName);
-                                        },
-                                        child: Categorcard(
-                                          CategoryText: subjectName,
-                                          isActive:
-                                              _selectedSubject == subjectName,
-                                        ),
-                                      );
-                                    }).toList(),
-                                  );
-                                }
-                              },
-                            ),
+                            subjectListWidget,
                           ],
                         ),
                       ),
