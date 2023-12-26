@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+
 import 'package:taskplus/screens/AddNewTask/category_card.dart';
 import 'package:taskplus/services/subject_service.dart';
 
 class SubjectListWidget extends StatefulWidget {
-  SubjectListWidget({super.key});
+  final Function(String) onSubjectSelected;
+  SubjectListWidget({
+    Key? key,
+    required this.onSubjectSelected,
+  }) : super(key: key);
 
   @override
   State<SubjectListWidget> createState() => _SubjectListWidgetState();
@@ -36,10 +41,12 @@ class _SubjectListWidgetState extends State<SubjectListWidget> {
             crossAxisAlignment: WrapCrossAlignment.start,
             children: subjectList.map((subject) {
               String subjectName = subject['subjectName'].toString();
+              String subjectId = subject['subjectId'].toString();
               return GestureDetector(
                 onTap: () {
                   _setSelectSubject(subjectName);
                   // You can perform any additional actions here
+                  widget.onSubjectSelected(subjectId);
                 },
                 child: Categorcard(
                   CategoryText: subjectName,

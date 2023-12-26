@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/screens/AddNewTask/SubjectList.dart';
+import 'package:taskplus/services/task_service.dart';
 
 class AddNewTask extends StatefulWidget {
   const AddNewTask({Key? key}) : super(key: key);
@@ -12,17 +13,20 @@ class AddNewTask extends StatefulWidget {
 
 class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Titlecontroller;
+  late TextEditingController _DescriptionController;
   late TextEditingController _Datecontroller;
   late TextEditingController _Time;
 
-  DateTime SelectedDate = DateTime.now();
+  final TaskService _taskService = TaskService();
 
-  final SubjectListWidget subjectListWidget = SubjectListWidget();
+  DateTime SelectedDate = DateTime.now();
+  String selectedSubjectId = '';
 
   @override
   void initState() {
     super.initState();
     _Titlecontroller = TextEditingController();
+    _DescriptionController = TextEditingController();
     _Datecontroller = TextEditingController(
         text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.SelectedDate)}');
     _Time = TextEditingController(
@@ -55,8 +59,34 @@ class _AddNewTaskState extends State<AddNewTask> {
     }
   }
 
+  String combineDateAndTime(DateTime date, TimeOfDay time) {
+    DateTime combinedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    return combinedDateTime.toIso8601String();
+  }
+
+  TimeOfDay _getTimeOfDay(String timeString) {
+    List<String> parts = timeString.split(':');
+    int hour = int.parse(parts[0]);
+    int minute =
+        int.parse(parts[1].substring(0, 2)); // Removing AM/PM if present
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final SubjectListWidget subjectListWidget = SubjectListWidget(
+      onSubjectSelected: (String subject) {
+        setState(() {
+          selectedSubjectId = subject;
+        });
+      },
+    );
     return Material(
       child: SafeArea(
         child: Container(
@@ -206,6 +236,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                       Padding(
                         padding: const EdgeInsets.only(top: 10, bottom: 20),
                         child: TextFormField(
+                          controller: _DescriptionController,
                           keyboardType: TextInputType.multiline,
                           minLines: 1,
                           maxLines: 8,
@@ -253,7 +284,12 @@ class _AddNewTaskState extends State<AddNewTask> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          print(_Datecontroller.text);
+                          String combinedDateTime = combineDateAndTime(
+                              SelectedDate, _getTimeOfDay(_Time.text));
+                          print(selectedSubjectId);
+                          print(combinedDateTime);
+                          print(_Titlecontroller.text);
+                          print(_DescriptionController.text);
                         },
                         child: Container(
                           padding: EdgeInsets.all(15),
