@@ -142,18 +142,22 @@ class _TasksPageState extends State<TasksPage> {
                         child: Column(
                           children: [
                             SubjectCard(
+                              subjectId: '',
                               subjectName: "Project",
                               teacher: "saha",
                             ),
                             SubjectCard(
+                              subjectId: '',
                               subjectName: "Project",
                               teacher: "saha",
                             ),
                             SubjectCard(
+                              subjectId: '',
                               subjectName: "Project",
                               teacher: "saha",
                             ),
                             SubjectCard(
+                              subjectId: '',
                               subjectName: "Project",
                               teacher: "saha",
                             ),

@@ -1,5 +1,3 @@
-// subject_service.dart
-
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:taskplus/services/user_data.dart';
@@ -68,5 +66,31 @@ class SubjectService {
     }
   }
 
-  // Add more methods as needed for subject-related operations
+  Future<bool> deleteSubject(String subjectId) async {
+    final String apiUrl = '$baseUrl/$subjectId';
+    try {
+      String? token = await UserData.getToken();
+      final http.Response response = await http.delete(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': ' $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Successful subject deletion
+        print('Subject deleted successfully');
+        return true;
+      } else {
+        // Handle error
+        print('Failed to delete subject. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } catch (error) {
+      print('Error during delete subject request: $error');
+      return false;
+    }
+  }
 }

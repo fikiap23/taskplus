@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:taskplus/services/subject_service.dart';
 
 class SubjectCard extends StatelessWidget {
-  SubjectCard({Key? key, required this.subjectName, required this.teacher})
+  SubjectCard(
+      {Key? key,
+      required this.subjectName,
+      required this.teacher,
+      required this.subjectId})
       : super(key: key);
 
+  final String subjectId;
   final String subjectName;
   final String teacher;
+  final SubjectService _subjectService = SubjectService();
 
   @override
   Widget build(BuildContext context) {
@@ -96,30 +103,63 @@ class SubjectCard extends StatelessWidget {
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
+    bool isLoading = false; // Track loading state
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete Subject'),
-          content: Text('Are you sure you want to delete this subject?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implement logic to delete the subject
-                // You can call a delete method or perform any other actions
-                // ...
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Delete Subject'),
+              content: isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Text('Are you sure you want to delete this subject?'),
+              actions: [
+                TextButton(
+                  onPressed: isLoading
+                      ? null
+                      : () {
+                          Navigator.of(context).pop(); // Close the dialog
+                        },
+                  child: Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          // Set loading to true to show the loading indicator
+                          setState(() {
+                            isLoading = true;
+                          });
 
-                Navigator.of(context).pop(); // Close the dialog after deletion
-              },
-              child: Text('Delete'),
-            ),
-          ],
+                          // TODO: Implement logic to delete the subject
+                          bool deleteResult =
+                              await _subjectService.deleteSubject(subjectId);
+
+                          // Set loading to false to hide the loading indicator
+                          setState(() {
+                            isLoading = false;
+                          });
+
+                          if (deleteResult) {
+                            // Delete successful
+                            Navigator.of(context).pop();
+
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/home', (route) => false);
+                          } else {
+                            // Delete failed
+                            // Optionally, show an error message or handle the failure
+                          }
+                        },
+                  child: Text('Delete'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
