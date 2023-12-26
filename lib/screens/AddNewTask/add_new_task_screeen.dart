@@ -16,6 +16,7 @@ class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _DescriptionController;
   late TextEditingController _Datecontroller;
   late TextEditingController _Time;
+  bool isCreatingTask = false;
 
   final TaskService _taskService = TaskService();
 
@@ -283,13 +284,36 @@ class _AddNewTaskState extends State<AddNewTask> {
                         height: 100,
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           String combinedDateTime = combineDateAndTime(
                               SelectedDate, _getTimeOfDay(_Time.text));
-                          print(selectedSubjectId);
-                          print(combinedDateTime);
-                          print(_Titlecontroller.text);
-                          print(_DescriptionController.text);
+
+                          // Create a map with task details
+                          Map<String, dynamic> taskData = {
+                            'title': _Titlecontroller.text,
+                            'description': _DescriptionController.text,
+                            'dueDate': combinedDateTime,
+                            // Add other task details as needed
+                          };
+
+                          // Set the loading state to true
+                          setState(() {
+                            isCreatingTask = true;
+                          });
+
+                          try {
+                            // Call the createTask method
+                            await _taskService.createTask(
+                                taskData, selectedSubjectId);
+
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/tasks', (route) => false);
+                          } finally {
+                            // Set the loading state to false, whether the task creation succeeds or fails
+                            setState(() {
+                              isCreatingTask = false;
+                            });
+                          }
                         },
                         child: Container(
                           padding: EdgeInsets.all(15),
@@ -298,14 +322,19 @@ class _AddNewTaskState extends State<AddNewTask> {
                             color: Color.fromRGBO(130, 0, 255, 1),
                           ),
                           alignment: Alignment.center,
-                          child: Text(
-                            "Create Task",
-                            style: GoogleFonts.montserrat(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
+                          child: isCreatingTask
+                              ? CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                )
+                              : Text(
+                                  "Create Task",
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
                         ),
                       )
                     ],
