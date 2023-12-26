@@ -4,8 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 class SubjectCard extends StatelessWidget {
   SubjectCard({Key? key, required this.subjectName, required this.teacher})
       : super(key: key);
-  late String subjectName;
-  late String teacher;
+
+  final String subjectName;
+  final String teacher;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +41,7 @@ class SubjectCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      this.subjectName,
+                      subjectName,
                       style: GoogleFonts.montserrat(
                         color: Colors.black,
                         fontSize: 15,
@@ -47,7 +49,7 @@ class SubjectCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      this.teacher,
+                      teacher,
                       style: GoogleFonts.montserrat(
                         color: Colors.grey,
                         fontSize: 10,
@@ -57,15 +59,69 @@ class SubjectCard extends StatelessWidget {
                   ],
                 ),
                 Expanded(child: Container()),
-                Icon(
-                  Icons.more_vert_outlined,
-                  color: Colors.grey,
-                ),
+                _buildPopupMenuButton(context),
               ]),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildPopupMenuButton(BuildContext context) {
+    return PopupMenuButton<int>(
+      icon: Icon(Icons.more_vert, color: Colors.grey), // Three-dot icon
+      itemBuilder: (context) => [
+        PopupMenuItem<int>(
+          value: 0,
+          child: Text('Edit'),
+        ),
+        PopupMenuItem<int>(
+          value: 1,
+          child: Text('Delete'),
+        ),
+      ],
+      onSelected: (value) {
+        if (value == 0) {
+          // TODO: Implement logic for editing the subject
+          // You can navigate to an edit screen or perform any other actions
+          // ...
+
+          print('Edit selected');
+        } else if (value == 1) {
+          _showDeleteConfirmationDialog(context);
+        }
+      },
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Subject'),
+          content: Text('Are you sure you want to delete this subject?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Implement logic to delete the subject
+                // You can call a delete method or perform any other actions
+                // ...
+
+                Navigator.of(context).pop(); // Close the dialog after deletion
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
