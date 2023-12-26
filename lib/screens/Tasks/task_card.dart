@@ -85,7 +85,7 @@ class TaskCard extends StatelessWidget {
               ),
               SizedBox(height: 4),
               Text(
-                'Deadline: ${DateFormat('MMM dd, yyyy HH:mm').format(parsedDeadline.toLocal())}',
+                'Deadline: ${DateFormat('MMM dd, yyyy HH:mm').format(parsedDeadline)}',
                 style: GoogleFonts.montserrat(
                   color: Colors.white,
                   fontSize: 12,

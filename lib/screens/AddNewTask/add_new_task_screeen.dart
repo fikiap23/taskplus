@@ -30,8 +30,10 @@ class _AddNewTaskState extends State<AddNewTask> {
     _DescriptionController = TextEditingController();
     _Datecontroller = TextEditingController(
         text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.SelectedDate)}');
+    // Menggunakan format 24 jam
     _Time = TextEditingController(
-        text: '${DateFormat.jm().format(DateTime.now())}');
+      text: '${DateFormat.Hm().format(DateTime.now())}',
+    );
   }
 
   _selectDate(BuildContext context) async {
@@ -55,9 +57,19 @@ class _AddNewTaskState extends State<AddNewTask> {
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
       setState(() {
-        _Time.text = result.format(context);
+        _Time.text = _formatTime(result);
       });
     }
+  }
+
+  String _formatTime(TimeOfDay time) {
+    // Format waktu menjadi "HH:mm:ss"
+    String formattedTime = DateFormat('HH:mm:ss').format(
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+          time.hour, time.minute),
+    );
+
+    return formattedTime;
   }
 
   String combineDateAndTime(DateTime date, TimeOfDay time) {
@@ -308,6 +320,8 @@ class _AddNewTaskState extends State<AddNewTask> {
 
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/tasks', (route) => false);
+                            print(_Time.text);
+                            print(combinedDateTime);
                           } finally {
                             // Set the loading state to false, whether the task creation succeeds or fails
                             setState(() {

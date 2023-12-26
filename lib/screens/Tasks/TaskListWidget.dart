@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:taskplus/screens/Home/subject_card.dart';
 import 'package:taskplus/screens/Tasks/task_card.dart';
 import 'package:taskplus/services/task_service.dart';
 
@@ -31,7 +29,7 @@ class _TaskListWidgetState extends State<TaskListWidget> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: taskDataList.map((taskData) {
-              print(taskData);
+              // print(taskData);
               final subjectData = taskData['subjectData'];
               return TaskCard(
                 subjectId: subjectData['subjectId'],
