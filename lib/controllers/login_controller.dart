@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
 import 'package:taskplus/services/user_service.dart';
-import 'package:taskplus/services/user_data.dart'; // Import the UserData class
+import 'package:taskplus/services/user_data.dart';
+import 'package:taskplus/common/widgets/loader.dart';
 
 class LoginController {
   final FocusNode focusNodePassword = FocusNode();
@@ -20,6 +21,12 @@ class LoginController {
   }
 
   Future<void> loginUser(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Disallow tapping outside the dialog to close
+      builder: (context) => const Loader(), // Show loading indicator
+    );
+
     final requestData = {
       "identifier": controllerIdentifier.text,
       "password": controllerPassword.text,
@@ -32,13 +39,12 @@ class LoginController {
         print('Login successful: $response');
 
         // Save user data to SharedPreferences
-        // Save user data to SharedPreferences
         await UserData.saveUserData(response);
 
-        // print('User data saved: ${await UserData.getUserDataValue('name')}');
+        // Close loading indicator
+        Navigator.pop(context);
 
         // Navigate to the home screen
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -50,9 +56,15 @@ class LoginController {
       } else {
         // Handle error
         print('Login failed');
+
+        // Close loading indicator
+        Navigator.pop(context);
       }
     } catch (error) {
       print('Error during login request: $error');
+
+      // Close loading indicator
+      Navigator.pop(context);
     }
   }
 }

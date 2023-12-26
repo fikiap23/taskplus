@@ -1,6 +1,7 @@
 // signup_controller.dart
 
 import 'package:flutter/material.dart';
+import 'package:taskplus/common/widgets/loader.dart';
 import 'package:taskplus/screens/Auth/login_screen.dart';
 import 'package:taskplus/services/user_service.dart';
 
@@ -30,6 +31,12 @@ class SignupController {
   }
 
   Future<void> signupUser(BuildContext context) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Loader(), // Show loading indicator
+    );
+
     final requestData = {
       "name": controllerName.text,
       "username": controllerUsername.text,
@@ -43,8 +50,9 @@ class SignupController {
       if (response != null) {
         // Successful signup
         print('Signup successful: $response');
+        // Close loading indicator
+        Navigator.pop(context);
         // Navigate to login screen upon successful signup
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -54,9 +62,13 @@ class SignupController {
       } else {
         // Handle error
         print('Signup failed');
+        // Close loading indicator
+        Navigator.pop(context);
       }
     } catch (error) {
       print('Error during signup request: $error');
+      // Close loading indicator
+      Navigator.pop(context);
     }
   }
 }
