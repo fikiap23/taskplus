@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:taskplus/services/subject_service.dart';
-// Sesuaikan dengan path yang sesuai
 
-class CreateProjectDialog extends StatelessWidget {
+class CreateProjectDialog extends StatefulWidget {
+  @override
+  _CreateProjectDialogState createState() => _CreateProjectDialogState();
+}
+
+class _CreateProjectDialogState extends State<CreateProjectDialog> {
   final TextEditingController subjectNameController = TextEditingController();
   final TextEditingController teacherNameController = TextEditingController();
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -39,40 +44,66 @@ class CreateProjectDialog extends StatelessWidget {
             child: Text('Cancel'),
           ),
           ElevatedButton(
-            onPressed: () async {
-              // Implement your logic for creating the subject
-              String subjectName = subjectNameController.text;
-              String teacherName = teacherNameController.text;
+            onPressed: isLoading
+                ? null
+                : () async {
+                    // Set loading to true to show the loading indicator
+                    setState(() {
+                      isLoading = true;
+                    });
 
-              // Create a map with subject details
-              Map<String, dynamic> subjectData = {
-                'name': subjectName,
-                'dosen': teacherName,
-                // Add other subject details as needed
-              };
+                    // Implement your logic for creating the subject
+                    String subjectName = subjectNameController.text;
+                    String teacherName = teacherNameController.text;
 
-              // Create an instance of SubjectService
-              SubjectService subjectService = SubjectService();
+                    // Create a map with subject details
+                    Map<String, dynamic> subjectData = {
+                      'name': subjectName,
+                      'dosen': teacherName,
+                      // Add other subject details as needed
+                    };
 
-              // Call the createSubject method
-              Map<String, dynamic>? result =
-                  await subjectService.createSubject(subjectData);
+                    // Create an instance of SubjectService
+                    SubjectService subjectService = SubjectService();
 
-              if (result != null) {
-                // Successful subject creation
-                print('Subject created successfully: $result');
-                // Perform any additional actions or update UI as needed
-              } else {
-                // Handle subject creation failure
-                print('Subject creation failed');
-                // Display an error message or perform other actions
-              }
+                    try {
+                      // Call the createSubject method
+                      Map<String, dynamic>? result =
+                          await subjectService.createSubject(subjectData);
 
-              Navigator.of(context).pop();
-              Navigator.pushNamedAndRemoveUntil(
-                  context, '/home', (route) => false);
-            },
-            child: Text('Create Subject'),
+                      if (result != null) {
+                        // Successful subject creation
+                        print('Subject created successfully: $result');
+                        // Perform any additional actions or update UI as needed
+                      } else {
+                        // Handle subject creation failure
+                        print('Subject creation failed');
+                        // Display an error message or perform other actions
+                      }
+                    } catch (error) {
+                      print('Error creating subject: $error');
+                      // Handle error, display an error message, or perform other actions
+                    } finally {
+                      // Set loading to false to hide the loading indicator
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
+
+                    Navigator.of(context).pop();
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/home', (route) => false);
+                  },
+            child: isLoading
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      strokeWidth: 3,
+                    ),
+                  )
+                : Text('Create Subject'),
           ),
         ],
       ),
