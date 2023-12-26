@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:taskplus/services/user_data.dart';
 
-class SubjectService {
+class TaskService {
   static const String baseUrl =
-      'https://taskplus-backend.vercel.app/v1/api/subjects';
+      'https://taskplus-backend.vercel.app/v1/api/tasks';
 
-  Future<Map<String, dynamic>?> createSubject(
-      Map<String, dynamic> requestData) async {
-    const String apiUrl = '$baseUrl/create';
+  Future<Map<String, dynamic>?> createTask(
+      Map<String, dynamic> requestData, String subjectId) async {
+    String apiUrl = '$baseUrl/$subjectId/create';
     try {
       String? token = await UserData.getToken();
       final http.Response response = await http.post(
@@ -21,22 +21,22 @@ class SubjectService {
       );
 
       if (response.statusCode == 201) {
-        // Successful subject creation
+        // Successful task creation
         final result = jsonDecode(response.body);
         return result;
       } else {
         // Handle error
-        print('Subject creation failed. Status code: ${response.statusCode}');
+        print('Task creation failed. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
         return null;
       }
     } catch (error) {
-      print('Error during subject creation request: $error');
+      print('Error during task creation request: $error');
       return null;
     }
   }
 
-  Future<List<Map<String, dynamic>>?> getSubjects() async {
+  Future<List<Map<String, dynamic>>?> getTasks() async {
     const String apiUrl = '$baseUrl/list';
     try {
       String? token = await UserData.getToken();
@@ -49,55 +49,25 @@ class SubjectService {
       );
 
       if (response.statusCode == 200) {
-        // Successful retrieval of subjects
+        // Successful retrieval of tasks
         final List<dynamic> result = jsonDecode(response.body);
-        final List<Map<String, dynamic>> subjects =
+        final List<Map<String, dynamic>> tasks =
             List<Map<String, dynamic>>.from(result);
-        return subjects;
+        return tasks;
       } else {
         // Handle error
-        print('Failed to get subjects. Status code: ${response.statusCode}');
+        print('Failed to get tasks. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
         return null;
       }
     } catch (error) {
-      print('Error during get subjects request: $error');
+      print('Error during get tasks request: $error');
       return null;
     }
   }
 
-  Future<List<Map<String, dynamic>>?> getAllNameSubjects() async {
-    const String apiUrl = '$baseUrl/types';
-    try {
-      String? token = await UserData.getToken();
-      final http.Response response = await http.get(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-          'auth-token': ' $token',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        // Successful retrieval of subjects
-        final List<dynamic> result = jsonDecode(response.body);
-        final List<Map<String, dynamic>> subjects =
-            List<Map<String, dynamic>>.from(result);
-        return subjects;
-      } else {
-        // Handle error
-        print('Failed to get subjects. Status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        return null;
-      }
-    } catch (error) {
-      print('Error during get subjects request: $error');
-      return null;
-    }
-  }
-
-  Future<bool> deleteSubject(String subjectId) async {
-    final String apiUrl = '$baseUrl/$subjectId';
+  Future<bool> deleteTask(String taskId) async {
+    final String apiUrl = '$baseUrl/$taskId';
     try {
       String? token = await UserData.getToken();
       final http.Response response = await http.delete(
@@ -109,24 +79,24 @@ class SubjectService {
       );
 
       if (response.statusCode == 200) {
-        // Successful subject deletion
-        print('Subject deleted successfully');
+        // Successful task deletion
+        print('Task deleted successfully');
         return true;
       } else {
         // Handle error
-        print('Failed to delete subject. Status code: ${response.statusCode}');
+        print('Failed to delete task. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
         return false;
       }
     } catch (error) {
-      print('Error during delete subject request: $error');
+      print('Error during delete task request: $error');
       return false;
     }
   }
 
-  Future<bool> updateSubject(
-      String subjectId, Map<String, dynamic> updatedData) async {
-    final String apiUrl = '$baseUrl/$subjectId';
+  Future<bool> updateTask(
+      String taskId, Map<String, dynamic> updatedData) async {
+    final String apiUrl = '$baseUrl/$taskId';
     try {
       String? token = await UserData.getToken();
       final http.Response response = await http.put(
@@ -139,17 +109,17 @@ class SubjectService {
       );
 
       if (response.statusCode == 200) {
-        // Successful subject update
-        print('Subject updated successfully');
+        // Successful task update
+        print('Task updated successfully');
         return true;
       } else {
         // Handle error
-        print('Failed to update subject. Status code: ${response.statusCode}');
+        print('Failed to update task. Status code: ${response.statusCode}');
         print('Response body: ${response.body}');
         return false;
       }
     } catch (error) {
-      print('Error during update subject request: $error');
+      print('Error during update task request: $error');
       return false;
     }
   }

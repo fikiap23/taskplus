@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/screens/AddNewTask/category_card.dart';
+import 'package:taskplus/services/subject_service.dart';
 
 class AddNewTask extends StatefulWidget {
   const AddNewTask({Key? key}) : super(key: key);
@@ -11,12 +12,13 @@ class AddNewTask extends StatefulWidget {
 }
 
 class _AddNewTaskState extends State<AddNewTask> {
+  final SubjectService _subjectService = SubjectService();
   late TextEditingController _Titlecontroller;
   late TextEditingController _Datecontroller;
   late TextEditingController _StartTime;
   late TextEditingController _EndTime;
   DateTime SelectedDate = DateTime.now();
-  String Category = "Meeting";
+  String _selectedSubject = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -62,9 +64,9 @@ class _AddNewTaskState extends State<AddNewTask> {
     }
   }
 
-  _SetCategory(String Category) {
+  _setSelectSubject(String selectSubject) {
     this.setState(() {
-      this.Category = Category;
+      this._selectedSubject = selectSubject;
     });
   }
 
@@ -286,7 +288,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Category",
+                              "Task Category",
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
                                 color: Colors.black,
@@ -294,75 +296,47 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 decoration: TextDecoration.none,
                               ),
                             ),
-                            Wrap(
-                              alignment: WrapAlignment.spaceEvenly,
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Marketting');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Marketting',
-                                    isActive: this.Category == 'Marketting',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Meeting');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Meeting',
-                                    isActive: this.Category == 'Meeting',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Study');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Study',
-                                    isActive: this.Category == 'Study',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Sports');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Sports',
-                                    isActive: this.Category == 'Sports',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Development');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Development',
-                                    isActive: this.Category == 'Development',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Family');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Family',
-                                    isActive: this.Category == 'Family',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Urgent');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Urgent',
-                                    isActive: this.Category == 'Urgent',
-                                  ),
-                                )
-                              ],
-                            )
+                            FutureBuilder(
+                              future: _subjectService.getAllNameSubjects(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  // Cast snapshot.data to List<Map<String, dynamic>>
+                                  List<Map<String, dynamic>> subjectList =
+                                      (snapshot.data as List<dynamic>)
+                                          .cast<Map<String, dynamic>>();
+
+                                  // Extract subject names from the list of maps
+                                  List<String> subjectNames = subjectList
+                                      .map((subject) =>
+                                          subject['subjectName'].toString())
+                                      .toList();
+
+                                  return Wrap(
+                                    alignment: WrapAlignment.spaceEvenly,
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.start,
+                                    children: subjectNames.map((subjectName) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          // Implement your logic when a subject is tapped
+                                          _setSelectSubject(subjectName);
+                                        },
+                                        child: Categorcard(
+                                          CategoryText: subjectName,
+                                          isActive:
+                                              _selectedSubject == subjectName,
+                                        ),
+                                      );
+                                    }).toList(),
+                                  );
+                                }
+                              },
+                            ),
                           ],
                         ),
                       ),
