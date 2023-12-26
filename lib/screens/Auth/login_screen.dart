@@ -1,7 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:taskplus/screens/Home/HomeScreen.dart';
+// login_screen.dart
 
-import 'signupScreen.dart';
+import 'package:flutter/material.dart';
+
+import 'package:taskplus/screens/auth/signup_screen.dart';
+
+import 'package:taskplus/controllers/login_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({
@@ -14,12 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-
-  final FocusNode _focusNodePassword = FocusNode();
-  final TextEditingController _controllerUsername = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-
-  bool _obscurePassword = true;
+  final LoginController _loginController = LoginController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 60),
               TextFormField(
                 style: const TextStyle(color: Colors.white),
-                controller: _controllerUsername,
+                controller: _loginController.controllerIdentifier,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: "Username",
@@ -55,7 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onEditingComplete: () => _focusNodePassword.requestFocus(),
+                onEditingComplete: () =>
+                    _loginController.focusNodePassword.requestFocus(),
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter username.";
@@ -65,9 +64,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _controllerPassword,
-                focusNode: _focusNodePassword,
-                obscureText: _obscurePassword,
+                controller: _loginController.controllerPassword,
+                focusNode: _loginController.focusNodePassword,
+                obscureText: _loginController.obscurePassword,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -75,10 +74,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
-                          _obscurePassword = !_obscurePassword;
+                          _loginController.obscurePassword =
+                              !_loginController.obscurePassword;
                         });
                       },
-                      icon: _obscurePassword
+                      icon: _loginController.obscurePassword
                           ? const Icon(Icons.visibility_outlined)
                           : const Icon(Icons.visibility_off_outlined)),
                   border: OutlineInputBorder(
@@ -106,16 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const HomePage();
-                            },
-                          ),
-                        );
+                        await _loginController.loginUser(context);
                       }
                     },
                     child: const Text("Login"),
@@ -152,9 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void dispose() {
-    _focusNodePassword.dispose();
-    _controllerUsername.dispose();
-    _controllerPassword.dispose();
+    _loginController.dispose();
     super.dispose();
   }
 }

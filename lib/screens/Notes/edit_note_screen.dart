@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/models/noteModel.dart';
+import 'package:taskplus/models/note_model.dart';
 
 class EditScreen extends StatefulWidget {
   final NoteModel? note;

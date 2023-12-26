@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskplus/controllers/signup_controller.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -10,14 +11,7 @@ class SignupScreen extends StatefulWidget {
 class _SignupScreenState extends State<SignupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
 
-  final FocusNode _focusNodeEmail = FocusNode();
-  final FocusNode _focusNodePassword = FocusNode();
-  final FocusNode _focusNodeConfirmPassword = FocusNode();
-  final TextEditingController _controllerUsername = TextEditingController();
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerConFirmPassword =
-      TextEditingController();
+  final SignupController _signupController = SignupController();
 
   bool _obscurePassword = true;
 
@@ -42,7 +36,32 @@ class _SignupScreenState extends State<SignupScreen> {
               ),
               const SizedBox(height: 35),
               TextFormField(
-                controller: _controllerUsername,
+                controller: _signupController.controllerName,
+                focusNode: _signupController.focusNodeName,
+                keyboardType: TextInputType.name,
+                decoration: InputDecoration(
+                  labelText: "Name",
+                  prefixIcon: const Icon(Icons.person_pin_outlined),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                validator: (String? value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter Name.";
+                  }
+                  return null;
+                },
+                onEditingComplete: () =>
+                    _signupController.focusNodeUsername.requestFocus(),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _signupController.controllerUsername,
+                focusNode: _signupController.focusNodeUsername,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(
                   labelText: "Username",
@@ -60,12 +79,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   }
                   return null;
                 },
-                onEditingComplete: () => _focusNodeEmail.requestFocus(),
+                onEditingComplete: () =>
+                    _signupController.focusNodeEmail.requestFocus(),
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _controllerEmail,
-                focusNode: _focusNodeEmail,
+                controller: _signupController.controllerEmail,
+                focusNode: _signupController.focusNodeEmail,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   labelText: "Email",
@@ -85,13 +105,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   }
                   return null;
                 },
-                onEditingComplete: () => _focusNodePassword.requestFocus(),
+                onEditingComplete: () =>
+                    _signupController.focusNodePassword.requestFocus(),
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _controllerPassword,
+                controller: _signupController.controllerPassword,
                 obscureText: _obscurePassword,
-                focusNode: _focusNodePassword,
+                focusNode: _signupController.focusNodePassword,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
                   labelText: "Password",
@@ -121,13 +142,13 @@ class _SignupScreenState extends State<SignupScreen> {
                   return null;
                 },
                 onEditingComplete: () =>
-                    _focusNodeConfirmPassword.requestFocus(),
+                    _signupController.focusNodeConfirmPassword.requestFocus(),
               ),
               const SizedBox(height: 10),
               TextFormField(
-                controller: _controllerConFirmPassword,
+                controller: _signupController.controllerConfirmPassword,
                 obscureText: _obscurePassword,
-                focusNode: _focusNodeConfirmPassword,
+                focusNode: _signupController.focusNodeConfirmPassword,
                 keyboardType: TextInputType.visiblePassword,
                 decoration: InputDecoration(
                   labelText: "Confirm Password",
@@ -151,7 +172,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return "Please enter password.";
-                  } else if (value != _controllerPassword.text) {
+                  } else if (value !=
+                      _signupController.controllerPassword.text) {
                     return "Password doesn't match.";
                   }
                   return null;
@@ -167,24 +189,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState?.validate() ?? false) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            width: 200,
-                            backgroundColor:
-                                Theme.of(context).colorScheme.secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            content: const Text("Registered Successfully"),
-                          ),
-                        );
-
-                        _formKey.currentState?.reset();
-
-                        Navigator.pop(context);
+                        await _signupController.signupUser(context);
+                        // Navigate or perform further actions based on the signup result
                       }
                     },
                     child: const Text("Register"),
@@ -210,13 +218,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   void dispose() {
-    _focusNodeEmail.dispose();
-    _focusNodePassword.dispose();
-    _focusNodeConfirmPassword.dispose();
-    _controllerUsername.dispose();
-    _controllerEmail.dispose();
-    _controllerPassword.dispose();
-    _controllerConFirmPassword.dispose();
+    _signupController.dispose();
     super.dispose();
   }
 }

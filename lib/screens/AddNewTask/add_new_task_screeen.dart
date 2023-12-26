@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:taskplus/screens/AddNewTask/CategoryCard.dart';
+import 'package:taskplus/screens/AddNewTask/SubjectList.dart';
 
 class AddNewTask extends StatefulWidget {
   const AddNewTask({Key? key}) : super(key: key);
@@ -16,17 +16,18 @@ class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _StartTime;
   late TextEditingController _EndTime;
   DateTime SelectedDate = DateTime.now();
-  String Category = "Meeting";
+
+  final SubjectListWidget subjectListWidget = SubjectListWidget();
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _Titlecontroller = new TextEditingController();
-    _Datecontroller = new TextEditingController(
+    _Titlecontroller = TextEditingController();
+    _Datecontroller = TextEditingController(
         text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.SelectedDate)}');
-    _StartTime = new TextEditingController(
+    _StartTime = TextEditingController(
         text: '${DateFormat.jm().format(DateTime.now())}');
-    _EndTime = new TextEditingController(
+    _EndTime = TextEditingController(
         text: '${DateFormat.jm().format(DateTime.now().add(
       Duration(hours: 1),
     ))}');
@@ -60,12 +61,6 @@ class _AddNewTaskState extends State<AddNewTask> {
         }
       });
     }
-  }
-
-  _SetCategory(String Category) {
-    this.setState(() {
-      this.Category = Category;
-    });
   }
 
   @override
@@ -286,7 +281,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Category",
+                              "Task Category",
                               textAlign: TextAlign.center,
                               style: GoogleFonts.montserrat(
                                 color: Colors.black,
@@ -294,75 +289,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                                 decoration: TextDecoration.none,
                               ),
                             ),
-                            Wrap(
-                              alignment: WrapAlignment.spaceEvenly,
-                              crossAxisAlignment: WrapCrossAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Marketting');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Marketting',
-                                    isActive: this.Category == 'Marketting',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Meeting');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Meeting',
-                                    isActive: this.Category == 'Meeting',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Study');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Study',
-                                    isActive: this.Category == 'Study',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Sports');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Sports',
-                                    isActive: this.Category == 'Sports',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Development');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Development',
-                                    isActive: this.Category == 'Development',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Family');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Family',
-                                    isActive: this.Category == 'Family',
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    this._SetCategory('Urgent');
-                                  },
-                                  child: Categorcard(
-                                    CategoryText: 'Urgent',
-                                    isActive: this.Category == 'Urgent',
-                                  ),
-                                )
-                              ],
-                            )
+                            subjectListWidget,
                           ],
                         ),
                       ),
