@@ -77,6 +77,7 @@ class TaskCard extends StatelessWidget {
             children: [
               Text(
                 description,
+                maxLines: 3,
                 style: GoogleFonts.montserrat(
                   color: Colors.white,
                   fontSize: 12,

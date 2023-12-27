@@ -39,9 +39,13 @@ class _TaskListWidgetState extends State<TaskListWidget> {
                     MaterialPageRoute(
                       builder: (context) => DetailTaskScreen(
                         subjectId: subjectData['subjectId'],
-                        subjectName: taskData['title'],
+                        subjectName: subjectData['subjectName'],
+                        teacher: subjectData['dosen'],
                         description: taskData['description'],
                         deadline: taskData['dueDate'],
+                        title: taskData['title'],
+                        taskId: taskData['_id'],
+                        isCompleted: taskData['completed'],
                       ),
                     ),
                   );
