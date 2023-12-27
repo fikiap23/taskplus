@@ -198,6 +198,68 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 10),
+                  child: TextField(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    readOnly: true,
+                    controller: _Time,
+                    decoration: InputDecoration(
+                      labelText: "Time",
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          _selectTime(context);
+                        },
+                        child: Icon(
+                          Icons.alarm,
+                          color: Colors.white,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      fillColor: Colors.white,
+                      labelStyle: GoogleFonts.montserrat(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 10),
+                  child: TextFormField(
+                    controller: _DescriptionController,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1, // Specify the minimum number of lines to show
+                    maxLines:
+                        null, // Set maxLines to null for an unlimited number of lines
+                    cursorColor: Colors.white,
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: "Description",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      fillColor: Colors.white,
+                      labelStyle: GoogleFonts.montserrat(
+                        color: Colors.white30,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 40),
                   padding:
@@ -211,69 +273,6 @@ class _AddNewTaskState extends State<AddNewTask> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: TextField(
-                            style:
-                                TextStyle(color: Colors.black26, fontSize: 15),
-                            readOnly: true,
-                            controller: _Time,
-                            decoration: InputDecoration(
-                              labelText: "Time",
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  _selectTime(context);
-                                },
-                                child: Icon(
-                                  Icons.alarm,
-                                  color: Colors.black26,
-                                ),
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black26),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black26),
-                              ),
-                              fillColor: Colors.black26,
-                              labelStyle: GoogleFonts.montserrat(
-                                color: Colors.black26,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: TextFormField(
-                          controller: _DescriptionController,
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          maxLines: 8,
-                          cursorColor: Colors.black26,
-                          style: GoogleFonts.montserrat(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                          decoration: InputDecoration(
-                            labelText: "Description",
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black26),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black26),
-                            ),
-                            fillColor: Colors.black26,
-                            labelStyle: GoogleFonts.montserrat(
-                              color: Colors.black26,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
                       Container(
                         padding: const EdgeInsets.only(top: 10, bottom: 20),
                         child: Column(
