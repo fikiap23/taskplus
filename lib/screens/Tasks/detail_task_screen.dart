@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'update_task.dart';
 
 class DetailTaskScreen extends StatelessWidget {
   final String subjectId;
@@ -63,6 +64,15 @@ class DetailTaskScreen extends StatelessWidget {
                   _buildActionButton(Icons.update, 'Update', Colors.orange, () {
                     // Implement your logic for updating the task
                     // You can navigate to a form screen or show a modal bottom sheet for editing
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return UpdateTask(
+                          taskId: taskId,
+                          title: title,
+                          description: description,
+                          dueDate: deadline,
+                          subjectId: subjectId);
+                    }));
                   }),
                   _buildActionButton(Icons.delete, 'Delete', Colors.red, () {
                     // Implement your logic for deleting the task
