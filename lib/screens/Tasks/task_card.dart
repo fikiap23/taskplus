@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:taskplus/services/subject_service.dart';
 
 class TaskCard extends StatelessWidget {
   TaskCard({
@@ -18,7 +17,6 @@ class TaskCard extends StatelessWidget {
   final String subjectName;
   final String description;
   final String deadline; // Updated to String
-  final SubjectService _subjectService = SubjectService();
 
   final List<IconData> randomIcons = [
     Icons.assignment,
@@ -96,90 +94,8 @@ class TaskCard extends StatelessWidget {
               ),
             ],
           ),
-          trailing: _buildPopupMenuButton(context),
         ),
       ),
-    );
-  }
-
-  Widget _buildPopupMenuButton(BuildContext context) {
-    return PopupMenuButton<int>(
-      icon: Icon(Icons.more_vert, color: Colors.grey),
-      itemBuilder: (context) => [
-        PopupMenuItem<int>(
-          value: 0,
-          child: Text('Edit'),
-        ),
-        PopupMenuItem<int>(
-          value: 1,
-          child: Text('Delete'),
-        ),
-      ],
-      onSelected: (value) {
-        if (value == 0) {
-          // TODO: Implement edit logic
-        } else if (value == 1) {
-          _showDeleteConfirmationDialog(context);
-        }
-      },
-    );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    bool isLoading = false;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return AlertDialog(
-              title: Text('Delete Task'),
-              content: isLoading
-                  ? Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Text('Are you sure you want to delete this task?'),
-              actions: [
-                TextButton(
-                  onPressed: isLoading
-                      ? null
-                      : () {
-                          Navigator.of(context).pop();
-                        },
-                  child: Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: isLoading
-                      ? null
-                      : () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-
-                          // TODO: Implement logic to delete the task
-                          bool deleteResult =
-                              await _subjectService.deleteSubject(subjectId);
-
-                          setState(() {
-                            isLoading = false;
-                          });
-
-                          if (deleteResult) {
-                            Navigator.of(context).pop();
-
-                            // TODO: Navigate or update UI accordingly
-                          } else {
-                            // Optionally, show an error message or handle the failure
-                          }
-                        },
-                  child: Text('Delete'),
-                ),
-              ],
-            );
-          },
-        );
-      },
     );
   }
 }
