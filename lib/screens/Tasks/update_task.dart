@@ -41,11 +41,12 @@ class _UpdateTaskState extends State<UpdateTask> {
     super.initState();
     _titleController = TextEditingController(text: widget.title);
     _descriptionController = TextEditingController(text: widget.description);
+    selectedDate = DateTime.parse(widget.dueDate); // Use widget.dueDate
     _dateController = TextEditingController(
-      text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.selectedDate)}',
+      text: '${DateFormat('EEE, MMM d, ' 'yy').format(selectedDate)}',
     );
     _timeController = TextEditingController(
-      text: '${DateFormat.Hm().format(DateTime.now())}',
+      text: '${DateFormat.Hm().format(selectedDate)}',
     );
   }
 
@@ -90,6 +91,17 @@ class _UpdateTaskState extends State<UpdateTask> {
     int minute =
         int.parse(parts[1].substring(0, 2)); // Removing AM/PM if present
     return TimeOfDay(hour: hour, minute: minute);
+  }
+
+  String combineDateAndTime(DateTime date, TimeOfDay time) {
+    DateTime combinedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    return combinedDateTime.toIso8601String();
   }
 
   @override
@@ -267,55 +279,33 @@ class _UpdateTaskState extends State<UpdateTask> {
                       topRight: Radius.circular(30),
                     ),
                   ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Task Category",
-                              textAlign: TextAlign.center,
+                  child: GestureDetector(
+                    onTap: () async {
+                      String combinedDateTime = combineDateAndTime(
+                          selectedDate, _getTimeOfDay(_timeController.text));
+                      print(combinedDateTime);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Color.fromRGBO(130, 0, 255, 1),
+                      ),
+                      alignment: Alignment.center,
+                      child: isUpdatingTask
+                          ? CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            )
+                          : Text(
+                              "Update Task",
                               style: GoogleFonts.montserrat(
-                                color: Colors.black,
-                                fontSize: 20,
-                                decoration: TextDecoration.none,
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
                               ),
                             ),
-                            subjectListWidget,
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 100,
-                      ),
-                      GestureDetector(
-                        onTap: () async {},
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Color.fromRGBO(130, 0, 255, 1),
-                          ),
-                          alignment: Alignment.center,
-                          child: isUpdatingTask
-                              ? CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white),
-                                )
-                              : Text(
-                                  "Update Task",
-                                  style: GoogleFonts.montserrat(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal,
-                                  ),
-                                ),
-                        ),
-                      )
-                    ],
+                    ),
                   ),
                 ),
               ],
