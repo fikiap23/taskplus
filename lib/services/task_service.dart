@@ -66,8 +66,8 @@ class TaskService {
     }
   }
 
-  Future<bool> deleteTask(String taskId) async {
-    final String apiUrl = '$baseUrl/$taskId';
+  Future<bool> deleteTask(String subjectId, String taskId) async {
+    final String apiUrl = '$baseUrl/$subjectId/$taskId';
     try {
       String? token = await UserData.getToken();
       final http.Response response = await http.delete(
