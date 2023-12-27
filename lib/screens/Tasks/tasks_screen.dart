@@ -15,6 +15,8 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   DateTime _selectedDate = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  bool isDatePickerEnabled = true;
 
   @override
   void initState() {
@@ -24,6 +26,16 @@ class _TasksPageState extends State<TasksPage> {
   void _onDateChange(DateTime date) {
     setState(() {
       _selectedDate = date;
+      formattedDate = DateFormat('yyyy-MM-dd').format(date);
+      isDatePickerEnabled = true;
+    });
+  }
+
+  // Function to show all tasks
+  void _showAllTasks() {
+    setState(() {
+      formattedDate = '';
+      isDatePickerEnabled = false; // Disable DatePicker
     });
   }
 
@@ -61,11 +73,6 @@ class _TasksPageState extends State<TasksPage> {
                               fontSize: 20,
                               fontWeight: FontWeight.w500,
                             ),
-                          ),
-                          Icon(
-                            Icons.search_rounded,
-                            color: Colors.black,
-                            size: 30,
                           ),
                         ],
                       ),
@@ -123,16 +130,31 @@ class _TasksPageState extends State<TasksPage> {
                       DatePicker(
                         DateTime.now(),
                         initialSelectedDate: _selectedDate,
-                        selectionColor: Color.fromARGB(255, 123, 0, 245),
+                        selectionColor:
+                            isDatePickerEnabled ? Colors.blue : Colors.grey,
                         onDateChange: _onDateChange,
                         height: 90,
                       ),
                     ],
                   ),
                 ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _showAllTasks,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        onPrimary: Colors.white,
+                      ),
+                      child: Text('Show All Tasks'),
+                    ),
+                  ],
+                ),
                 Container(
-                  padding: EdgeInsets.all(25),
-                  child: TaskListWidget(),
+                  padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+                  child: TaskListWidget(filterDate: formattedDate),
                 ),
               ],
             ),

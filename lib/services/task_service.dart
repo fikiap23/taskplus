@@ -36,8 +36,9 @@ class TaskService {
     }
   }
 
-  Future<List<Map<String, dynamic>>?> getTasks() async {
-    const String apiUrl = '$baseUrl/list';
+  Future<List<Map<String, dynamic>>?> getTasks({String? filterDate}) async {
+    String apiUrl =
+        '$baseUrl/list${filterDate != null ? '?filterDate=$filterDate' : ''}';
     try {
       String? token = await UserData.getToken();
       final http.Response response = await http.get(
