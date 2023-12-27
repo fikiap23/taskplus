@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:taskplus/screens/Tasks/task_card.dart';
 import 'package:taskplus/services/task_service.dart';
 
+import 'detail_task_screen.dart';
+
 class TaskListWidget extends StatefulWidget {
   @override
   _TaskListWidgetState createState() => _TaskListWidgetState();
@@ -29,18 +31,27 @@ class _TaskListWidgetState extends State<TaskListWidget> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: taskDataList.map((taskData) {
-              // print(taskData);
               final subjectData = taskData['subjectData'];
-              return TaskCard(
-                subjectId: subjectData['subjectId'],
-                subjectName: taskData['title'],
-                description: taskData['description'],
-                deadline: taskData['dueDate'],
-                // // You can customize the remaining fields based on your needs
-                // title: taskData['title'],
-                // description: taskData['description'],
-                // dueDate: taskData['dueDate'],
-                // completed: taskData['completed'],
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailTaskScreen(
+                        subjectId: subjectData['subjectId'],
+                        subjectName: taskData['title'],
+                        description: taskData['description'],
+                        deadline: taskData['dueDate'],
+                      ),
+                    ),
+                  );
+                },
+                child: TaskCard(
+                  subjectId: subjectData['subjectId'],
+                  subjectName: taskData['title'],
+                  description: taskData['description'],
+                  deadline: taskData['dueDate'],
+                ),
               );
             }).toList(),
           );
