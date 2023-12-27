@@ -96,7 +96,7 @@ class TaskService {
 
   Future<bool> updateTask(
       String taskId, String subjectId, Map<String, dynamic> updatedData) async {
-    final String apiUrl = '$baseUrl/$subjectId$taskId';
+    final String apiUrl = '$baseUrl/$subjectId/$taskId';
     try {
       String? token = await UserData.getToken();
       final http.Response response = await http.put(

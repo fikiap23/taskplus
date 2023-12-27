@@ -319,8 +319,8 @@ class _AddNewTaskState extends State<AddNewTask> {
 
                             Navigator.pushNamedAndRemoveUntil(
                                 context, '/tasks', (route) => false);
-                            print(_Time.text);
-                            print(combinedDateTime);
+                            // print(_Time.text);
+                            // print(combinedDateTime);
                           } finally {
                             // Set the loading state to false, whether the task creation succeeds or fails
                             setState(() {

@@ -116,14 +116,14 @@ class _UpdateTaskState extends State<UpdateTask> {
     return Material(
       child: SafeArea(
         child: Container(
-          color: Color.fromRGBO(130, 0, 255, 1),
+          color: const Color.fromRGBO(130, 0, 255, 1),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
               children: [
                 Container(
-                  padding:
-                      EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, top: 20, bottom: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -134,7 +134,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                         child: const Icon(Icons.arrow_back,
                             size: 30, color: Colors.white),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 50,
                       ),
                       Text(
@@ -164,10 +164,10 @@ class _UpdateTaskState extends State<UpdateTask> {
                         color: Colors.white,
                         fontSize: 18,
                       ),
-                      enabledBorder: UnderlineInputBorder(
+                      enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
@@ -192,10 +192,10 @@ class _UpdateTaskState extends State<UpdateTask> {
                         color: Colors.white,
                         fontSize: 18,
                       ),
-                      enabledBorder: OutlineInputBorder(
+                      enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: OutlineInputBorder(
+                      focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
@@ -217,7 +217,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                         onTap: () {
                           _selectDate(context);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.calendar_today,
                           color: Colors.white,
                         ),
@@ -226,10 +226,10 @@ class _UpdateTaskState extends State<UpdateTask> {
                         color: Colors.white,
                         fontSize: 15,
                       ),
-                      enabledBorder: UnderlineInputBorder(
+                      enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
@@ -251,7 +251,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                         onTap: () {
                           _selectTime(context);
                         },
-                        child: Icon(
+                        child: const Icon(
                           Icons.access_time,
                           color: Colors.white,
                         ),
@@ -260,19 +260,19 @@ class _UpdateTaskState extends State<UpdateTask> {
                         color: Colors.white,
                         fontSize: 15,
                       ),
-                      enabledBorder: UnderlineInputBorder(
+                      enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
-                      focusedBorder: UnderlineInputBorder(
+                      focusedBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                     ),
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 40),
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.only(top: 40),
+                  padding: const EdgeInsets.all(20),
+                  decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
@@ -283,17 +283,51 @@ class _UpdateTaskState extends State<UpdateTask> {
                     onTap: () async {
                       String combinedDateTime = combineDateAndTime(
                           selectedDate, _getTimeOfDay(_timeController.text));
-                      print(combinedDateTime);
+                      Map<String, dynamic> updatedData = {
+                        'title': _titleController.text,
+                        'description': _descriptionController.text,
+                        'dueDate': combinedDateTime,
+                        // Add other task details as needed
+                      };
+
+                      try {
+                        setState(() {
+                          isUpdatingTask = true;
+                        });
+                        bool result = await _taskService.updateTask(
+                            widget.taskId, widget.subjectId, updatedData);
+
+                        if (result) {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Task updated successfully"),
+                          ));
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/tasks', (route) => false);
+                        } else {
+                          // ignore: use_build_context_synchronously
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text("Failed to update task"),
+                          ));
+                        }
+                      } finally {
+                        setState(() {
+                          isUpdatingTask = false;
+                        });
+                      }
                     },
                     child: Container(
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Color.fromRGBO(130, 0, 255, 1),
+                        color: const Color.fromRGBO(130, 0, 255, 1),
                       ),
                       alignment: Alignment.center,
                       child: isUpdatingTask
-                          ? CircularProgressIndicator(
+                          ? const CircularProgressIndicator(
                               valueColor:
                                   AlwaysStoppedAnimation<Color>(Colors.white),
                             )
