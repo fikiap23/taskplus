@@ -1,92 +1,167 @@
 import 'package:flutter/material.dart';
-import 'package:taskplus/models/note_model.dart';
+import 'package:taskplus/services/notes_service.dart';
 
-class EditScreen extends StatefulWidget {
-  final NoteModel? note;
-  const EditScreen({super.key, this.note});
+class EditNoteScreen extends StatefulWidget {
+  final String? noteId;
+  final String? title;
+  final String? description;
+
+  const EditNoteScreen({
+    Key? key,
+    this.noteId,
+    this.title,
+    this.description,
+  }) : super(key: key);
 
   @override
-  State<EditScreen> createState() => _EditScreenState();
+  State<EditNoteScreen> createState() => _EditNoteScreenState();
 }
 
-class _EditScreenState extends State<EditScreen> {
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
+class _EditNoteScreenState extends State<EditNoteScreen> {
+  final NotesService _notesService = NotesService();
+
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  bool isLoading = false;
 
   @override
   void initState() {
-    // TODO: implement initState
-    if (widget.note != null) {
-      _titleController = TextEditingController(text: widget.note!.title);
-      _descriptionController =
-          TextEditingController(text: widget.note!.description);
-    }
+    _titleController = TextEditingController(text: widget.title ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.description ?? '');
 
     super.initState();
+  }
+
+  Future<void> _saveNote() async {
+    final noteId = widget.noteId;
+    final title = _titleController.text;
+    final description = _descriptionController.text;
+
+    if (noteId == null || noteId.isEmpty) {
+      // If noteId is empty or null, it means this is a new note, so create it
+      setState(() {
+        isLoading = true;
+      });
+      final result = await _notesService.createNote({
+        'title': title,
+        'description': description,
+      });
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (result != null) {
+        // Note created successfully
+        Navigator.pushNamedAndRemoveUntil(context, '/notes', (route) => false);
+      } else {
+        // Handle error
+        // Show an error message or take appropriate action
+      }
+    } else {
+      setState(() {
+        isLoading = true;
+      });
+      // If noteId is not empty, it means this is an existing note, so update it
+      final result = await _notesService.updateNote(noteId, {
+        'title': title,
+        'description': description,
+      });
+
+      setState(() {
+        isLoading = false;
+      });
+
+      if (result) {
+        // Note updated successfully
+        Navigator.pushNamedAndRemoveUntil(context, '/notes', (route) => false);
+      } else {
+        // Handle error
+        // Show an error message or take appropriate action
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.grey.shade900,
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  padding: const EdgeInsets.all(0),
-                  icon: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: Color(0xFF4B6AAB),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.white,
-                    ),
-                  ))
-            ],
-          ),
-          Expanded(
-              child: ListView(
-            children: [
-              TextField(
-                controller: _titleController,
-                style: const TextStyle(color: Colors.white, fontSize: 30),
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Title',
-                    hintStyle: TextStyle(color: Colors.grey, fontSize: 30)),
-              ),
-              Divider(),
-              TextField(
-                controller: _descriptionController,
-                style: const TextStyle(
-                  color: Colors.white,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 40, 16, 0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      padding: const EdgeInsets.all(0),
+                      icon: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF4B6AAB),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-                maxLines: null,
-                decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Type something here',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                    )),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      TextField(
+                        controller: _titleController,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 30),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Title',
+                          hintStyle:
+                              TextStyle(color: Colors.grey, fontSize: 30),
+                        ),
+                      ),
+                      Divider(),
+                      TextField(
+                        controller: _descriptionController,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          hintText: 'Type something here',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (isLoading)
+            Container(
+              color: Colors.black.withOpacity(0.5),
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ],
-          ))
-        ]),
+            ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(
-              context, [_titleController.text, _descriptionController.text]);
-        },
+        onPressed: _saveNote,
         elevation: 10,
         backgroundColor: Color(0xFF4B6AAB),
         child: const Icon(Icons.save),

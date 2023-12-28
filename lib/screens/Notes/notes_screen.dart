@@ -96,13 +96,21 @@ class _NotesScreenState extends State<NotesScreen> {
                             child: ListTile(
                               onTap: () async {
                                 // Handle onTap
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditNoteScreen(
+                                            noteId: sampleNotes![index]['_id'],
+                                            title: sampleNotes![index]['title'],
+                                            description: sampleNotes![index]
+                                                ['description'])));
                               },
                               title: RichText(
                                 maxLines: 3,
                                 overflow: TextOverflow.ellipsis,
                                 text: TextSpan(
                                   text: "${sampleNotes![index]['title']}\n",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 18,
@@ -112,7 +120,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                     TextSpan(
                                       text:
                                           "${sampleNotes![index]['description']} ",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Colors.black,
                                         fontWeight: FontWeight.normal,
                                         fontSize: 14,
@@ -156,11 +164,10 @@ class _NotesScreenState extends State<NotesScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Handle floating action button
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const EditScreen(),
+              builder: (BuildContext context) => const EditNoteScreen(),
             ),
           );
         },
