@@ -53,6 +53,7 @@ class NotesService {
         final List<dynamic> result = jsonDecode(response.body);
         final List<Map<String, dynamic>> notes =
             List<Map<String, dynamic>>.from(result);
+        print(notes);
         return notes;
       } else {
         // Handle error

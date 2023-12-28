@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:taskplus/models/note_model.dart';
 import 'package:taskplus/screens/Notes/edit_note_screen.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
+import 'package:taskplus/services/notes_service.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
@@ -14,40 +14,20 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  List<NoteModel> sampleNotes = [
-    NoteModel(
-      id: 0,
-      title: 'Tugas PAM',
-      description:
-          'Bikin aplikasi menggunakan flutter, kemudian deploy ke playstore',
-      modifiedTime: DateTime(2022, 1, 1, 3, 45),
-    ),
-    NoteModel(
-      id: 1,
-      title: 'Tugas Database',
-      description: 'Desain dan implementasikan skema database untuk proyek',
-      modifiedTime: DateTime(2022, 1, 2, 9, 30),
-    ),
-    NoteModel(
-      id: 2,
-      title: 'Tugas UI/UX',
-      description: 'Rancang antarmuka pengguna yang menarik dan responsif',
-      modifiedTime: DateTime(2022, 1, 3, 12, 15),
-    ),
-    NoteModel(
-      id: 3,
-      title: 'Tugas Testing',
-      description:
-          'Bangun dan jalankan rangkaian uji untuk memastikan aplikasi berfungsi dengan baik',
-      modifiedTime: DateTime(2022, 1, 4, 14, 0),
-    ),
-    NoteModel(
-      id: 4,
-      title: 'Tugas Dokumentasi',
-      description: 'Dokumentasikan setiap bagian dari proyek secara lengkap',
-      modifiedTime: DateTime(2022, 1, 5, 16, 45),
-    ),
-  ];
+  final NotesService _notesService = NotesService();
+  List<Map<String, dynamic>>? sampleNotes = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData(); // Fetch data when the widget initializes
+  }
+
+  Future<void> fetchData() async {
+    sampleNotes = await _notesService.getNotes();
+    sampleNotes ??= [];
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,70 +66,88 @@ class _NotesScreenState extends State<NotesScreen> {
               height: 20,
             ),
             Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.only(top: 30),
-                itemCount: sampleNotes.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 20),
-                    color: getRandomColor(),
-                    elevation: 3,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListTile(
-                        onTap: () async {
-                          // Handle onTap
-                        },
-                        title: RichText(
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          text: TextSpan(
-                            text: '${sampleNotes[index].title} \n',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              height: 1.5,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: sampleNotes[index].description,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14,
-                                  height: 1.5,
+              child: FutureBuilder(
+                future: _notesService.getNotes(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (snapshot.data == null ||
+                      (snapshot.data as List).isEmpty) {
+                    return const Center(child: Text('No notes available.'));
+                  } else {
+                    // Data has been fetched successfully
+                    sampleNotes = snapshot.data;
+                    return ListView.builder(
+                      padding: const EdgeInsets.only(top: 30),
+                      itemCount: sampleNotes!.length,
+                      itemBuilder: (context, index) {
+                        print(sampleNotes![index]);
+                        return Card(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          color: getRandomColor(),
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ListTile(
+                              onTap: () async {
+                                // Handle onTap
+                              },
+                              title: RichText(
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                text: TextSpan(
+                                  text: "${sampleNotes![index]['title']}\n",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    height: 1.5,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                      text:
+                                          "${sampleNotes![index]['description']} ",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                        height: 1.5,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        subtitle: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Edited: ${DateFormat('EEE MMM d, yyyy h:mm a').format(sampleNotes[index].modifiedTime)}',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.grey.shade800,
+                              subtitle: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Edited: ${_formatTime(sampleNotes![index]['updatedAt'])}',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ),
+                              trailing: IconButton(
+                                onPressed: () async {
+                                  // Handle delete
+                                  confirmDialog(context);
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                        trailing: IconButton(
-                          onPressed: () async {
-                            // Handle delete
-                            confirmDialog(context);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                        );
+                      },
+                    );
+                  }
                 },
               ),
             ),
@@ -179,6 +177,11 @@ class _NotesScreenState extends State<NotesScreen> {
   getRandomColor() {
     Random random = Random();
     return Colors.primaries[random.nextInt(Colors.primaries.length)];
+  }
+
+  String _formatTime(String time) {
+    DateTime parsedTime = DateTime.parse(time);
+    return DateFormat('yyyy-MM-dd HH:mm').format(parsedTime);
   }
 
   Future<dynamic> confirmDialog(BuildContext context) {
