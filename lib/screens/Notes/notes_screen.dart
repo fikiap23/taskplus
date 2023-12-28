@@ -144,7 +144,8 @@ class _NotesScreenState extends State<NotesScreen> {
                               trailing: IconButton(
                                 onPressed: () async {
                                   // Handle delete
-                                  confirmDialog(context);
+                                  confirmDialog(
+                                      context, sampleNotes![index]['_id']);
                                 },
                                 icon: const Icon(
                                   Icons.delete,
@@ -191,53 +192,98 @@ class _NotesScreenState extends State<NotesScreen> {
     return DateFormat('yyyy-MM-dd HH:mm').format(parsedTime);
   }
 
-  Future<dynamic> confirmDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.grey.shade900,
-            icon: const Icon(
-              Icons.info,
-              color: Colors.grey,
-            ),
-            title: const Text(
-              'Are you sure you want to delete?',
-              style: TextStyle(color: Colors.white),
-            ),
-            content: Row(
+  Future<void> confirmDialog(BuildContext context, String noteId) async {
+    bool confirm = await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              backgroundColor: Colors.grey.shade900,
+              icon: const Icon(
+                Icons.info,
+                color: Colors.grey,
+              ),
+              title: const Text(
+                'Are you sure you want to delete?',
+                style: TextStyle(color: Colors.white),
+              ),
+              content: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green),
-                      child: const SizedBox(
-                        width: 60,
-                        child: Text(
-                          'Yes',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )),
+                    onPressed: () async {
+                      Navigator.pop(context, true);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
+                    child: const SizedBox(
+                      width: 60,
+                      child: Text(
+                        'Yes',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
                   ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                      style:
-                          ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                      child: const SizedBox(
-                        width: 60,
-                        child: Text(
-                          'No',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )),
-                ]),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const SizedBox(
+                      width: 60,
+                      child: Text(
+                        'No',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ) ??
+        false;
+
+    if (confirm) {
+      // User confirmed, initiate the delete operation
+      await _deleteNoteAndNavigate(context, noteId);
+    }
+  }
+
+  Future<void> _deleteNoteAndNavigate(
+      BuildContext context, String noteId) async {
+    try {
+      // Show loading indicator
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Center(
+            child: CircularProgressIndicator(),
           );
-        });
+        },
+        barrierDismissible: false,
+      );
+
+      // Perform the delete operation
+      await _notesService.deleteNote(noteId);
+
+      // Hide loading indicator
+      Navigator.pop(context);
+
+      // Navigate back to the notes screen
+      Navigator.pushNamedAndRemoveUntil(context, '/notes', (route) => false);
+      print("Note deleted successfully");
+    } catch (error) {
+      // Handle error
+      // You can display an error message or take appropriate action
+      print("Error deleting note: $error");
+
+      // Hide loading indicator
+      Navigator.pop(context);
+    }
   }
 }
