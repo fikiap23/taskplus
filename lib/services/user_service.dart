@@ -48,18 +48,18 @@ class UserService {
         // Save token to SharedPreferences
         await UserData.saveToken(result["token"]);
 
-        print(await UserData.getToken());
+        // print(await UserData.getToken());
 
         // Successful login
         return jsonDecode(response.body);
       } else {
         // Handle error
-        print('Login failed. Status code: ${response.statusCode}');
-        print('Response body: ${response.body}');
+        // print('Login failed. Status code: ${response.statusCode}');
+        // print('Response body: ${response.body}');
         return null;
       }
     } catch (error) {
-      print('Error during login request: $error');
+      // print('Error during login request: $error');
       return null;
     }
   }

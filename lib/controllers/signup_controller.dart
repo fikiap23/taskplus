@@ -49,10 +49,10 @@ class SignupController {
       final response = await _userService.signup(requestData);
       if (response != null) {
         // Successful signup
-        print('Signup successful: $response');
-        // Close loading indicator
-        Navigator.pop(context);
-        // Navigate to login screen upon successful signup
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Signup successful, please login."),
+        ));
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -60,14 +60,15 @@ class SignupController {
           ),
         );
       } else {
-        // Handle error
-        print('Signup failed');
-        // Close loading indicator
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Signup failed. Please try again."),
+        ));
         Navigator.pop(context);
       }
     } catch (error) {
-      print('Error during signup request: $error');
-      // Close loading indicator
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Signup failed. Please try again."),
+      ));
       Navigator.pop(context);
     }
   }

@@ -103,7 +103,7 @@ class _AddNewTaskState extends State<AddNewTask> {
     return Material(
       child: SafeArea(
         child: Container(
-          color: Color.fromRGBO(130, 0, 255, 1),
+          color: Colors.blue,
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -332,7 +332,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Color.fromRGBO(130, 0, 255, 1),
+                            color: Colors.blue,
                           ),
                           alignment: Alignment.center,
                           child: isCreatingTask

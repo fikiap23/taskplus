@@ -115,12 +115,14 @@ class SubjectCard extends StatelessWidget {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
             return AlertDialog(
-              title: Text('Delete Subject'),
+              title:
+                  Text('Delete Subject', style: TextStyle(color: Colors.white)),
               content: isLoading
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : Text('Are you sure you want to delete this subject?'),
+                  : Text('Are you sure you want to delete this subject?',
+                      style: TextStyle(color: Colors.white)),
               actions: [
                 TextButton(
                   onPressed: isLoading
@@ -128,7 +130,7 @@ class SubjectCard extends StatelessWidget {
                       : () {
                           Navigator.of(context).pop(); // Close the dialog
                         },
-                  child: Text('Cancel'),
+                  child: Text('Cancel', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: isLoading

@@ -118,7 +118,10 @@ class DrawerMenu extends StatelessWidget {
               },
             ),
           ),
-          const Divider(),
+          const Divider(
+            thickness: 1,
+            color: Colors.blue,
+          ),
           ListTile(
             leading: const Icon(
               Icons.logout,

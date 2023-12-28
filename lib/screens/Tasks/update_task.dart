@@ -116,7 +116,7 @@ class _UpdateTaskState extends State<UpdateTask> {
     return Material(
       child: SafeArea(
         child: Container(
-          color: const Color.fromRGBO(130, 0, 255, 1),
+          color: Colors.blue[700],
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -323,7 +323,7 @@ class _UpdateTaskState extends State<UpdateTask> {
                       padding: const EdgeInsets.all(15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: const Color.fromRGBO(130, 0, 255, 1),
+                        color: Colors.blue,
                       ),
                       alignment: Alignment.center,
                       child: isUpdatingTask

@@ -29,16 +29,41 @@ class _EditProfileState extends State<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerMenu(),
+      drawer: const DrawerMenu(),
       appBar: AppBar(
-        title: Text("Edit Profile"),
+        title: const Text("Edit Profile"),
         actions: [
           IconButton(
             onPressed: () async {
-              await _editProfileController.updateProfile();
-              // Navigator.pop(context);
+              // Menampilkan loading menggunakan showDialog
+              showDialog(
+                context: context,
+                barrierDismissible:
+                    false, // user harus menunggu sampai loading selesai
+                builder: (BuildContext context) {
+                  return const AlertDialog(
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text("Saving profile..."),
+                      ],
+                    ),
+                  );
+                },
+              );
+
+              // Memanggil updateProfile
+              await _editProfileController.updateProfile(context);
+
+              // Menutup dialog saat proses selesai
+              Navigator.pop(context);
+
+              // Memperbarui widget
+              setState(() {});
             },
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
           ),
         ],
       ),
@@ -59,85 +84,72 @@ class _EditProfileState extends State<EditProfile> {
                         },
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                              _editProfileController.imagePath != null
-                                  ? FileImage(
-                                      File(_editProfileController.imagePath!))
-                                  : _editProfileController
-                                          .profilePictureController
-                                          .text
-                                          .isNotEmpty
-                                      ? NetworkImage(
-                                          _editProfileController
-                                              .profilePictureController.text,
-                                        )
-                                      : AssetImage("assets/images/user.png")
-                                          as ImageProvider,
+                          backgroundImage: _editProfileController.imagePath !=
+                                  null
+                              ? FileImage(
+                                  File(_editProfileController.imagePath!))
+                              : _editProfileController
+                                      .profilePictureController.text.isNotEmpty
+                                  ? NetworkImage(
+                                      _editProfileController
+                                          .profilePictureController.text,
+                                    )
+                                  : const AssetImage("assets/images/user.png")
+                                      as ImageProvider,
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       "Name",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     TextField(
                       controller: _editProfileController.nameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Enter your name",
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       "Username",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     TextField(
                       controller: _editProfileController.usernameController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Enter your username",
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       "Email",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     TextField(
                       controller: _editProfileController.emailController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Enter your email",
                       ),
                       keyboardType: TextInputType.emailAddress,
                       readOnly: true,
                     ),
-                    SizedBox(height: 20),
-                    Text(
-                      "Password",
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    TextFormField(
-                      controller: _editProfileController.passwordController,
-                      decoration: InputDecoration(
-                        hintText: "Enter your password",
-                      ),
-                      obscureText: true,
-                    ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       "New Password",
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     TextFormField(
                       controller: _editProfileController.newPasswordController,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: "Enter your new password",
+                        hintStyle: TextStyle(color: Colors.grey),
                       ),
+                      style: const TextStyle(color: Colors.black),
                       obscureText: true,
                     ),
                   ],
