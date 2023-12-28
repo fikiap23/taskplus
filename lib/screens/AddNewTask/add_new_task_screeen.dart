@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/screens/AddNewTask/SubjectList.dart';
+import 'package:taskplus/services/task_service.dart';
 
 class AddNewTask extends StatefulWidget {
   const AddNewTask({Key? key}) : super(key: key);
@@ -12,25 +13,27 @@ class AddNewTask extends StatefulWidget {
 
 class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Titlecontroller;
+  late TextEditingController _DescriptionController;
   late TextEditingController _Datecontroller;
-  late TextEditingController _StartTime;
-  late TextEditingController _EndTime;
-  DateTime SelectedDate = DateTime.now();
+  late TextEditingController _Time;
+  bool isCreatingTask = false;
 
-  final SubjectListWidget subjectListWidget = SubjectListWidget();
+  final TaskService _taskService = TaskService();
+
+  DateTime SelectedDate = DateTime.now();
+  String selectedSubjectId = '';
 
   @override
   void initState() {
     super.initState();
     _Titlecontroller = TextEditingController();
+    _DescriptionController = TextEditingController();
     _Datecontroller = TextEditingController(
         text: '${DateFormat('EEE, MMM d, ' 'yy').format(this.SelectedDate)}');
-    _StartTime = TextEditingController(
-        text: '${DateFormat.jm().format(DateTime.now())}');
-    _EndTime = TextEditingController(
-        text: '${DateFormat.jm().format(DateTime.now().add(
-      Duration(hours: 1),
-    ))}');
+    // Menggunakan format 24 jam
+    _Time = TextEditingController(
+      text: '${DateFormat.Hm().format(DateTime.now())}',
+    );
   }
 
   _selectDate(BuildContext context) async {
@@ -49,22 +52,54 @@ class _AddNewTaskState extends State<AddNewTask> {
     }
   }
 
-  _selectTime(BuildContext context, String Timetype) async {
+  _selectTime(BuildContext context) async {
     final TimeOfDay? result =
         await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (result != null) {
       setState(() {
-        if (Timetype == "StartTime") {
-          _StartTime.text = result.format(context);
-        } else {
-          _EndTime.text = result.format(context);
-        }
+        _Time.text = _formatTime(result);
       });
     }
   }
 
+  String _formatTime(TimeOfDay time) {
+    // Format waktu menjadi "HH:mm:ss"
+    String formattedTime = DateFormat('HH:mm:ss').format(
+      DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day,
+          time.hour, time.minute),
+    );
+
+    return formattedTime;
+  }
+
+  String combineDateAndTime(DateTime date, TimeOfDay time) {
+    DateTime combinedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+    return combinedDateTime.toIso8601String();
+  }
+
+  TimeOfDay _getTimeOfDay(String timeString) {
+    List<String> parts = timeString.split(':');
+    int hour = int.parse(parts[0]);
+    int minute =
+        int.parse(parts[1].substring(0, 2)); // Removing AM/PM if present
+    return TimeOfDay(hour: hour, minute: minute);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final SubjectListWidget subjectListWidget = SubjectListWidget(
+      onSubjectSelected: (String subject) {
+        setState(() {
+          selectedSubjectId = subject;
+        });
+      },
+    );
     return Material(
       child: SafeArea(
         child: Container(
@@ -139,7 +174,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                     readOnly: true,
                     decoration: InputDecoration(
-                      labelText: "Date",
+                      labelText: "Dateline",
                       suffixIcon: GestureDetector(
                         onTap: () {
                           _selectDate(context);
@@ -163,6 +198,68 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 10),
+                  child: TextField(
+                    style: TextStyle(color: Colors.white, fontSize: 15),
+                    readOnly: true,
+                    controller: _Time,
+                    decoration: InputDecoration(
+                      labelText: "Time",
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          _selectTime(context);
+                        },
+                        child: Icon(
+                          Icons.alarm,
+                          color: Colors.white,
+                        ),
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      fillColor: Colors.white,
+                      labelStyle: GoogleFonts.montserrat(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 10),
+                  child: TextFormField(
+                    controller: _DescriptionController,
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1, // Specify the minimum number of lines to show
+                    maxLines:
+                        null, // Set maxLines to null for an unlimited number of lines
+                    cursorColor: Colors.white,
+                    style: GoogleFonts.montserrat(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: "Description",
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      fillColor: Colors.white,
+                      labelStyle: GoogleFonts.montserrat(
+                        color: Colors.white30,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 40),
                   padding:
@@ -176,105 +273,6 @@ class _AddNewTaskState extends State<AddNewTask> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: TextField(
-                                readOnly: true,
-                                controller: _StartTime,
-                                decoration: InputDecoration(
-                                  labelText: "Date",
-                                  suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      _selectTime(context, "StartTime");
-                                    },
-                                    child: Icon(
-                                      Icons.alarm,
-                                      color: Colors.black26,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  fillColor: Colors.black26,
-                                  labelStyle: GoogleFonts.montserrat(
-                                    color: Colors.black26,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              child: TextField(
-                                readOnly: true,
-                                controller: _EndTime,
-                                decoration: InputDecoration(
-                                  labelText: "Date",
-                                  suffixIcon: GestureDetector(
-                                    onTap: () {
-                                      _selectTime(context, "EndTime");
-                                    },
-                                    child: Icon(
-                                      Icons.alarm,
-                                      color: Colors.black26,
-                                    ),
-                                  ),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.black26),
-                                  ),
-                                  fillColor: Colors.black26,
-                                  labelStyle: GoogleFonts.montserrat(
-                                    color: Colors.black26,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 20),
-                        child: TextFormField(
-                          keyboardType: TextInputType.multiline,
-                          minLines: 1,
-                          maxLines: 8,
-                          cursorColor: Colors.black26,
-                          style: GoogleFonts.montserrat(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                          decoration: InputDecoration(
-                            labelText: "Description",
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black26),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black26),
-                            ),
-                            fillColor: Colors.black26,
-                            labelStyle: GoogleFonts.montserrat(
-                              color: Colors.black26,
-                              fontSize: 15,
-                            ),
-                          ),
-                        ),
-                      ),
                       Container(
                         padding: const EdgeInsets.only(top: 10, bottom: 20),
                         child: Column(
@@ -296,20 +294,60 @@ class _AddNewTaskState extends State<AddNewTask> {
                       SizedBox(
                         height: 100,
                       ),
-                      Container(
-                        padding: EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Color.fromRGBO(130, 0, 255, 1),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Create Task",
-                          style: GoogleFonts.montserrat(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.normal,
+                      GestureDetector(
+                        onTap: () async {
+                          String combinedDateTime = combineDateAndTime(
+                              SelectedDate, _getTimeOfDay(_Time.text));
+
+                          // Create a map with task details
+                          Map<String, dynamic> taskData = {
+                            'title': _Titlecontroller.text,
+                            'description': _DescriptionController.text,
+                            'dueDate': combinedDateTime,
+                            // Add other task details as needed
+                          };
+
+                          // Set the loading state to true
+                          setState(() {
+                            isCreatingTask = true;
+                          });
+
+                          try {
+                            // Call the createTask method
+                            await _taskService.createTask(
+                                taskData, selectedSubjectId);
+
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/tasks', (route) => false);
+                            // print(_Time.text);
+                            // print(combinedDateTime);
+                          } finally {
+                            // Set the loading state to false, whether the task creation succeeds or fails
+                            setState(() {
+                              isCreatingTask = false;
+                            });
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Color.fromRGBO(130, 0, 255, 1),
                           ),
+                          alignment: Alignment.center,
+                          child: isCreatingTask
+                              ? CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white),
+                                )
+                              : Text(
+                                  "Create Task",
+                                  style: GoogleFonts.montserrat(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
                         ),
                       )
                     ],

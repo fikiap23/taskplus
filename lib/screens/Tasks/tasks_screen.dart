@@ -1,10 +1,10 @@
-import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:date_picker_timeline/date_picker_widget.dart';
 import 'package:taskplus/screens/AddNewTask/add_new_task_screeen.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
-import '../Home/subject_card.dart';
+import 'package:taskplus/screens/Tasks/TaskListWidget.dart';
 
 class TasksPage extends StatefulWidget {
   const TasksPage({Key? key}) : super(key: key);
@@ -15,10 +15,27 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   DateTime _selectedDate = DateTime.now();
+  String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  bool isDatePickerEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   void _onDateChange(DateTime date) {
     setState(() {
       _selectedDate = date;
+      formattedDate = DateFormat('yyyy-MM-dd').format(date);
+      isDatePickerEnabled = true;
+    });
+  }
+
+  // Function to show all tasks
+  void _showAllTasks() {
+    setState(() {
+      formattedDate = '';
+      isDatePickerEnabled = false; // Disable DatePicker
     });
   }
 
@@ -52,14 +69,10 @@ class _TasksPageState extends State<TasksPage> {
                           Text(
                             'My tasks',
                             style: GoogleFonts.montserrat(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500),
-                          ),
-                          Icon(
-                            Icons.search_rounded,
-                            color: Colors.black,
-                            size: 30,
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
@@ -117,55 +130,31 @@ class _TasksPageState extends State<TasksPage> {
                       DatePicker(
                         DateTime.now(),
                         initialSelectedDate: _selectedDate,
-                        selectionColor: Color.fromARGB(255, 123, 0, 245),
+                        selectionColor:
+                            isDatePickerEnabled ? Colors.blue : Colors.grey,
                         onDateChange: _onDateChange,
                         height: 90,
                       ),
                     ],
                   ),
                 ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _showAllTasks,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        onPrimary: Colors.white,
+                      ),
+                      child: Text('Show All Tasks'),
+                    ),
+                  ],
+                ),
                 Container(
-                  padding: EdgeInsets.all(25),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Task",
-                        style: GoogleFonts.montserrat(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                            SubjectCard(
-                              subjectId: '',
-                              subjectName: "Project",
-                              teacher: "saha",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                  padding: EdgeInsets.fromLTRB(25, 0, 25, 25),
+                  child: TaskListWidget(filterDate: formattedDate),
                 ),
               ],
             ),
