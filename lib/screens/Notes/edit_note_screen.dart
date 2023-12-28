@@ -11,14 +11,15 @@ class EditScreen extends StatefulWidget {
 
 class _EditScreenState extends State<EditScreen> {
   TextEditingController _titleController = TextEditingController();
-  TextEditingController _contentController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
     // TODO: implement initState
     if (widget.note != null) {
       _titleController = TextEditingController(text: widget.note!.title);
-      _contentController = TextEditingController(text: widget.note!.content);
+      _descriptionController =
+          TextEditingController(text: widget.note!.description);
     }
 
     super.initState();
@@ -65,7 +66,7 @@ class _EditScreenState extends State<EditScreen> {
               ),
               Divider(),
               TextField(
-                controller: _contentController,
+                controller: _descriptionController,
                 style: const TextStyle(
                   color: Colors.white,
                 ),
@@ -84,7 +85,7 @@ class _EditScreenState extends State<EditScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pop(
-              context, [_titleController.text, _contentController.text]);
+              context, [_titleController.text, _descriptionController.text]);
         },
         elevation: 10,
         backgroundColor: Color(0xFF4B6AAB),

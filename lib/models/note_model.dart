@@ -1,13 +1,13 @@
 class NoteModel {
   int id;
   String title;
-  String content;
+  String description;
   DateTime modifiedTime;
 
   NoteModel({
     required this.id,
     required this.title,
-    required this.content,
+    required this.description,
     required this.modifiedTime,
   });
 }
