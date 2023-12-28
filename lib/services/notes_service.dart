@@ -124,4 +124,36 @@ class NotesService {
       return false;
     }
   }
+
+  // Mencari catatan berdasarkan title atau description
+  Future<List<Map<String, dynamic>>?> searchNotes(String query) async {
+    final String apiUrl = '$baseUrl/search/$query';
+    try {
+      String? token = await UserData.getToken();
+      final http.Response response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': ' $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Successful search of notes
+        final List<dynamic> result = jsonDecode(response.body);
+        final List<Map<String, dynamic>> notes =
+            List<Map<String, dynamic>>.from(result);
+        print(notes);
+        return notes;
+      } else {
+        // Handle error
+        print('Failed to search notes. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return null;
+      }
+    } catch (error) {
+      print('Error during search notes request: $error');
+      return null;
+    }
+  }
 }

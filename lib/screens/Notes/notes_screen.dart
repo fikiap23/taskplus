@@ -15,6 +15,7 @@ class NotesScreen extends StatefulWidget {
 
 class _NotesScreenState extends State<NotesScreen> {
   final NotesService _notesService = NotesService();
+  TextEditingController searchController = TextEditingController();
   List<Map<String, dynamic>>? sampleNotes = [];
 
   @override
@@ -43,6 +44,11 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
             TextField(
               style: const TextStyle(fontSize: 16, color: Colors.white),
+              controller: searchController,
+              onChanged: (query) {
+                // Trigger search when the text in the TextField changes
+                _performSearch(query);
+              },
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 hintText: "Search notes...",
@@ -67,7 +73,9 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
             Expanded(
               child: FutureBuilder(
-                future: _notesService.getNotes(),
+                future: searchController.text.isEmpty
+                    ? _notesService.getNotes()
+                    : _notesService.searchNotes(searchController.text),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -180,6 +188,15 @@ class _NotesScreenState extends State<NotesScreen> {
         ),
       ),
     );
+  }
+
+  void _performSearch(String query) async {
+    // Trigger the search with the provided query
+    sampleNotes = await _notesService.searchNotes(query);
+    setState(() {
+      // Use setState to rebuild the UI when the search query changes
+      // sampleNotes = await _notesService.searchNotes(query);
+    });
   }
 
   getRandomColor() {
