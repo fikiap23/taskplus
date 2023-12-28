@@ -1,16 +1,21 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:taskplus/common/constants/colors.dart';
 import 'package:taskplus/services/notes_service.dart';
 
 class EditNoteScreen extends StatefulWidget {
   final String? noteId;
   final String? title;
   final String? description;
+  final Color? color;
 
   const EditNoteScreen({
     Key? key,
     this.noteId,
     this.title,
     this.description,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -83,10 +88,15 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     }
   }
 
+  getRandomColor() {
+    Random random = Random();
+    return backgroundColors[random.nextInt(backgroundColors.length)];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Colors.grey.shade900,
+      backgroundColor: widget.color ?? getRandomColor(),
       body: Stack(
         children: [
           Padding(
@@ -105,7 +115,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Color(0xFF4B6AAB),
+                          color: Colors.blue,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Icon(
@@ -122,7 +132,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                       TextField(
                         controller: _titleController,
                         style:
-                            const TextStyle(color: Colors.white, fontSize: 30),
+                            const TextStyle(color: Colors.black, fontSize: 30),
                         decoration: const InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Title',
@@ -130,11 +140,11 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                               TextStyle(color: Colors.grey, fontSize: 30),
                         ),
                       ),
-                      Divider(),
+                      Divider(color: Colors.blue, thickness: 1),
                       TextField(
                         controller: _descriptionController,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
                         maxLines: null,
                         decoration: const InputDecoration(
@@ -163,7 +173,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: _saveNote,
         elevation: 10,
-        backgroundColor: Color(0xFF4B6AAB),
+        backgroundColor: Colors.blue,
         child: const Icon(Icons.save),
       ),
     );

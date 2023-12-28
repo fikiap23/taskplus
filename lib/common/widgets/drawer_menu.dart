@@ -34,7 +34,7 @@ class DrawerMenu extends StatelessWidget {
                     padding: EdgeInsets.zero,
                     children: [
                       UserAccountsDrawerHeader(
-                        decoration: BoxDecoration(color: Color(0xFF4B6AAB)),
+                        decoration: BoxDecoration(color: Colors.blue),
                         accountName: Text(
                           name,
                           style: TextStyle(

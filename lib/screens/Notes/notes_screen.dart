@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:taskplus/common/constants/colors.dart';
 import 'package:taskplus/screens/Notes/edit_note_screen.dart';
 import 'package:taskplus/common/widgets/drawer_menu.dart';
 import 'package:taskplus/services/notes_service.dart';
@@ -56,7 +57,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   Icons.search,
                   color: Colors.white,
                 ),
-                fillColor: Color(0xFF4B6AAB),
+                fillColor: Colors.blue,
                 filled: true,
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -91,10 +92,11 @@ class _NotesScreenState extends State<NotesScreen> {
                       padding: const EdgeInsets.only(top: 30),
                       itemCount: sampleNotes!.length,
                       itemBuilder: (context, index) {
-                        print(sampleNotes![index]);
+                        // print(sampleNotes![index]);
+                        Color bgColor = getRandomColor();
                         return Card(
                           margin: const EdgeInsets.only(bottom: 20),
-                          color: getRandomColor(),
+                          color: bgColor,
                           elevation: 3,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
@@ -108,6 +110,7 @@ class _NotesScreenState extends State<NotesScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditNoteScreen(
+                                            color: bgColor,
                                             noteId: sampleNotes![index]['_id'],
                                             title: sampleNotes![index]['title'],
                                             description: sampleNotes![index]
@@ -181,7 +184,7 @@ class _NotesScreenState extends State<NotesScreen> {
           );
         },
         elevation: 10,
-        backgroundColor: Color(0xFF4B6AAB),
+        backgroundColor: Colors.blue,
         child: const Icon(
           Icons.add,
           size: 38,
@@ -201,7 +204,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
   getRandomColor() {
     Random random = Random();
-    return Colors.primaries[random.nextInt(Colors.primaries.length)];
+    return backgroundColors[random.nextInt(backgroundColors.length)];
   }
 
   String _formatTime(String time) {

@@ -100,7 +100,7 @@ class _TasksPageState extends State<TasksPage> {
                             child: Container(
                               padding: EdgeInsets.all(15),
                               decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 123, 0, 245),
+                                color: Colors.blue,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(

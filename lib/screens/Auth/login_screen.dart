@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 100),
               Text(
                 "Welcome to Taskplus",
-                style: Theme.of(context).textTheme.headlineLarge,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               const SizedBox(height: 10),
               Text(
@@ -40,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               const SizedBox(height: 60),
               TextFormField(
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.black),
                 controller: _loginController.controllerIdentifier,
                 keyboardType: TextInputType.name,
                 decoration: InputDecoration(

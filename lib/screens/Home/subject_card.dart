@@ -36,7 +36,7 @@ class SubjectCard extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 123, 0, 245),
+                    color: Colors.blue,
                     borderRadius: BorderRadius.all(Radius.circular(30)),
                   ),
                   child: const Icon(Icons.assignment, color: Colors.white),

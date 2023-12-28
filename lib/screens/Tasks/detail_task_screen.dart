@@ -64,25 +64,29 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
                       ? 'Completed'
                       : 'Not Completed'), // Display the status with an icon
               SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildDoneButton(),
-                  _buildActionButton(Icons.update, 'Update', Colors.orange, () {
-                    // Implement your logic for updating the task
-                    // You can navigate to a form screen or show a modal bottom sheet for editing
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) {
-                      return UpdateTask(
-                          taskId: widget.taskId,
-                          title: widget.title,
-                          description: widget.description,
-                          dueDate: widget.deadline,
-                          subjectId: widget.subjectId);
-                    }));
-                  }, context),
-                  _buildDeleteButton(),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildDoneButton(),
+                    _buildActionButton(Icons.update, 'Update', Colors.orange,
+                        () {
+                      // Implement your logic for updating the task
+                      // You can navigate to a form screen or show a modal bottom sheet for editing
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return UpdateTask(
+                            taskId: widget.taskId,
+                            title: widget.title,
+                            description: widget.description,
+                            dueDate: widget.deadline,
+                            subjectId: widget.subjectId);
+                      }));
+                    }, context),
+                    _buildDeleteButton(),
+                  ],
+                ),
               ),
             ],
           ),
