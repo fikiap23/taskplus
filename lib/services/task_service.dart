@@ -124,4 +124,33 @@ class TaskService {
       return false;
     }
   }
+
+  Future<bool> toggleTaskStatus(String subjectId, String taskId) async {
+    final String apiUrl = '$baseUrl/$subjectId/$taskId/status';
+    try {
+      String? token = await UserData.getToken();
+      final http.Response response = await http.patch(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': ' $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Successful task status toggle
+        print('Task status toggled successfully');
+        return true;
+      } else {
+        // Handle error
+        print(
+            'Failed to toggle task status. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return false;
+      }
+    } catch (error) {
+      print('Error during toggle task status request: $error');
+      return false;
+    }
+  }
 }

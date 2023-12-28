@@ -32,6 +32,7 @@ class DetailTaskScreen extends StatefulWidget {
 class _DetailTaskScreenState extends State<DetailTaskScreen> {
   final TaskService _taskService = TaskService();
   bool _isDeleting = false;
+  bool _isMarkingAsDone = false;
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +67,7 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildActionButton(Icons.done, 'Done', Colors.green, () {
-                    // Implement your logic for marking the task as done
-                    // You can use this onPressed callback to update the task status
-                  }, context),
+                  _buildDoneButton(),
                   _buildActionButton(Icons.update, 'Update', Colors.orange, () {
                     // Implement your logic for updating the task
                     // You can navigate to a form screen or show a modal bottom sheet for editing
@@ -118,6 +116,36 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
             } else {
               ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                 content: Text("Failed to delete task"),
+              ));
+            }
+          }, context);
+  }
+
+  Widget _buildDoneButton() {
+    return _isMarkingAsDone
+        ? CircularProgressIndicator() // Show loading indicator
+        : _buildActionButton(Icons.done, 'Done', Colors.green, () async {
+            // Implement your logic for deleting the task
+            // You can use this onPressed callback to delete the task
+            setState(() {
+              _isMarkingAsDone = true;
+            });
+
+            bool result = await _taskService.toggleTaskStatus(
+                widget.subjectId, widget.taskId);
+            setState(() {
+              _isMarkingAsDone = false;
+            });
+
+            if (result) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Task changed status successfully"),
+              ));
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/tasks', (route) => false);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Failed to change status task"),
               ));
             }
           }, context);
@@ -193,17 +221,28 @@ class _DetailTaskScreenState extends State<DetailTaskScreen> {
   }
 
   Widget _buildActionButton(IconData icon, String label, Color color,
-      VoidCallback onPressed, BuildContext context) {
+      VoidCallback onPressed, BuildContext context,
+      {bool}) {
     return Column(
       children: [
-        ElevatedButton.icon(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            primary: color,
+        if (label == 'Done') // Show the Done button
+          ElevatedButton.icon(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              primary: color,
+            ),
+            icon: Icon(icon, color: Colors.white),
+            label: Text(label, style: TextStyle(color: Colors.white)),
           ),
-          icon: Icon(icon, color: Colors.white),
-          label: Text(label, style: TextStyle(color: Colors.white)),
-        ),
+        if (label != 'Done') // Show other buttons
+          ElevatedButton.icon(
+            onPressed: onPressed,
+            style: ElevatedButton.styleFrom(
+              primary: color,
+            ),
+            icon: Icon(icon, color: Colors.white),
+            label: Text(label, style: TextStyle(color: Colors.white)),
+          ),
         SizedBox(height: 8),
       ],
     );
