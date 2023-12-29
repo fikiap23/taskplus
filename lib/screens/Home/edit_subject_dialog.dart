@@ -31,7 +31,9 @@ class _EditSubjectDialogState extends State<EditSubjectDialog> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
-        title: Text('Edit Subject'),
+        contentTextStyle: TextStyle(color: Colors.white),
+        backgroundColor: const Color.fromARGB(255, 64, 124, 177),
+        title: Text('Edit Subject', style: TextStyle(color: Colors.white)),
         content: Container(
           width: double.maxFinite,
           child: Column(
@@ -41,13 +43,18 @@ class _EditSubjectDialogState extends State<EditSubjectDialog> {
               Text('Subject Name:'),
               TextField(
                 controller: subjectNameController,
-                decoration: InputDecoration(hintText: 'Enter subject name'),
+                decoration: InputDecoration(
+                  hintText: 'Enter subject name',
+                ),
+                style: TextStyle(color: Colors.white), // Warna teks input
               ),
+
               SizedBox(height: 16),
               Text('Teacher:'),
               TextField(
                 controller: teacherNameController,
-                decoration: InputDecoration(hintText: 'Enter teacher name'),
+                decoration: InputDecoration(),
+                style: TextStyle(color: Colors.white), // Warna teks input
               ),
               // Add other fields as needed
             ],

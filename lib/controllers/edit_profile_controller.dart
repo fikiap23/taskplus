@@ -44,14 +44,14 @@ class EditProfileController {
     }
   }
 
-  Future<void> updateProfile() async {
+  Future<void> updateProfile(BuildContext context) async {
     try {
       // Mengambil data dari controller
       String userId = idController.text;
       String name = nameController.text;
       String email = emailController.text;
       String username = usernameController.text;
-      String password = passwordController.text;
+      String password = newPasswordController.text;
       String profilePic;
 
       // Jika imagePath tidak null, gunakan imagePath sebagai profilePic

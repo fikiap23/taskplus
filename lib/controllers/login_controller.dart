@@ -35,16 +35,15 @@ class LoginController {
     try {
       final response = await _userService.login(requestData);
       if (response != null) {
-        // Successful login
-        print('Login successful: $response');
-
         // Save user data to SharedPreferences
         await UserData.saveUserData(response);
 
         // Close loading indicator
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
         // Navigate to the home screen
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -55,15 +54,24 @@ class LoginController {
         );
       } else {
         // Handle error
-        print('Login failed');
+        // ignore: use_build_context_synchronously
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Login failed. Please check your credentials.',
+            ),
+          ),
+        );
 
         // Close loading indicator
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
       }
     } catch (error) {
       print('Error during login request: $error');
 
       // Close loading indicator
+      // ignore: use_build_context_synchronously
       Navigator.pop(context);
     }
   }

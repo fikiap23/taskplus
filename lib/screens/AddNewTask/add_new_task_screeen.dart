@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/screens/AddNewTask/SubjectList.dart';
+import 'package:taskplus/services/notif_service.dart';
 import 'package:taskplus/services/task_service.dart';
 
 class AddNewTask extends StatefulWidget {
@@ -17,7 +18,6 @@ class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Datecontroller;
   late TextEditingController _Time;
   bool isCreatingTask = false;
-
   final TaskService _taskService = TaskService();
 
   DateTime SelectedDate = DateTime.now();
@@ -26,6 +26,7 @@ class _AddNewTaskState extends State<AddNewTask> {
   @override
   void initState() {
     super.initState();
+    // listenToNotifications();
     _Titlecontroller = TextEditingController();
     _DescriptionController = TextEditingController();
     _Datecontroller = TextEditingController(
@@ -83,6 +84,16 @@ class _AddNewTaskState extends State<AddNewTask> {
     return combinedDateTime.toIso8601String();
   }
 
+  DateTime combineDateAndTimeForNotification(DateTime date, TimeOfDay time) {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+  }
+
   TimeOfDay _getTimeOfDay(String timeString) {
     List<String> parts = timeString.split(':');
     int hour = int.parse(parts[0]);
@@ -103,7 +114,7 @@ class _AddNewTaskState extends State<AddNewTask> {
     return Material(
       child: SafeArea(
         child: Container(
-          color: Color.fromRGBO(130, 0, 255, 1),
+          color: Colors.blue,
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -291,13 +302,14 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 100,
-                      ),
                       GestureDetector(
                         onTap: () async {
                           String combinedDateTime = combineDateAndTime(
                               SelectedDate, _getTimeOfDay(_Time.text));
+
+                          DateTime combinedDateTimeForNoti =
+                              combineDateAndTimeForNotification(
+                                  SelectedDate, _getTimeOfDay(_Time.text));
 
                           // Create a map with task details
                           Map<String, dynamic> taskData = {
@@ -314,13 +326,30 @@ class _AddNewTaskState extends State<AddNewTask> {
 
                           try {
                             // Call the createTask method
-                            await _taskService.createTask(
-                                taskData, selectedSubjectId);
+                            Map<String, dynamic>? response = await _taskService
+                                .createTask(taskData, selectedSubjectId);
 
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/tasks', (route) => false);
-                            // print(_Time.text);
-                            // print(combinedDateTime);
+                            if (response != null) {
+                              LocalNotifications.scheduleNotification(
+                                title: taskData['title'],
+                                body: taskData['description'],
+                                payload: taskData['dueDate'],
+                                deadline: combinedDateTimeForNoti,
+                                frequency: ReminderFrequency
+                                    .minute, // Atur frekuensi pengingat
+                                interval:
+                                    1, // Atur interval waktu (dalam menit)
+                              );
+                              // print(response);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/tasks', (route) => false);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Failed to create task"),
+                              ));
+                            }
                           } finally {
                             // Set the loading state to false, whether the task creation succeeds or fails
                             setState(() {
@@ -332,7 +361,7 @@ class _AddNewTaskState extends State<AddNewTask> {
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Color.fromRGBO(130, 0, 255, 1),
+                            color: Colors.blue,
                           ),
                           alignment: Alignment.center,
                           child: isCreatingTask

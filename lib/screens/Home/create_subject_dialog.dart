@@ -15,23 +15,30 @@ class _CreateSubjectDialogState extends State<CreateSubjectDialog> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
-        title: Text('Create Subject'),
+        backgroundColor: const Color.fromARGB(255, 64, 124, 177),
+        title:
+            const Text('Create Subject', style: TextStyle(color: Colors.white)),
         content: Container(
           width: double.maxFinite,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Subject Name:'),
+              const Text('Subject Name:',
+                  style: TextStyle(color: Colors.white)),
               TextField(
                 controller: subjectNameController,
-                decoration: InputDecoration(hintText: 'Enter subject name'),
+                decoration:
+                    const InputDecoration(hintText: 'Enter subject name'),
+                style: TextStyle(color: Colors.white),
               ),
-              SizedBox(height: 16),
-              Text('Teacher:'),
+              const SizedBox(height: 16),
+              const Text('Teacher:', style: TextStyle(color: Colors.white)),
               TextField(
                 controller: teacherNameController,
-                decoration: InputDecoration(hintText: 'Enter teacher name'),
+                decoration:
+                    const InputDecoration(hintText: 'Enter teacher name'),
+                style: TextStyle(color: Colors.white),
               ),
             ],
           ),
@@ -41,7 +48,7 @@ class _CreateSubjectDialogState extends State<CreateSubjectDialog> {
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: isLoading
@@ -95,7 +102,7 @@ class _CreateSubjectDialogState extends State<CreateSubjectDialog> {
                         context, '/home', (route) => false);
                   },
             child: isLoading
-                ? SizedBox(
+                ? const SizedBox(
                     width: 20,
                     height: 20,
                     child: CircularProgressIndicator(
@@ -103,7 +110,7 @@ class _CreateSubjectDialogState extends State<CreateSubjectDialog> {
                       strokeWidth: 3,
                     ),
                   )
-                : Text('Create Subject'),
+                : const Text('Create Subject'),
           ),
         ],
       ),

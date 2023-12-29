@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskplus/main.dart';
 import 'package:taskplus/screens/Auth/login_screen.dart';
 import 'package:taskplus/screens/Auth/signup_screen.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
@@ -13,36 +14,39 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(color: Colors.white),
-          bodyLarge: TextStyle(color: Colors.white),
-          bodySmall: TextStyle(color: Colors.white),
-          titleMedium: TextStyle(color: Colors.white),
-          headlineLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.black),
+          bodyLarge: TextStyle(color: Colors.black),
+          bodySmall: TextStyle(color: Colors.black),
+          titleMedium: TextStyle(color: Colors.black),
+          headlineLarge: TextStyle(color: Colors.black),
         ),
-        scaffoldBackgroundColor: const Color(0xFF21325E),
+        scaffoldBackgroundColor: const Color.fromRGBO(242, 244, 255, 1),
         colorScheme: const ColorScheme(
           brightness: Brightness.dark,
-          primary: Color(0xFF3E497A),
+          primary: Colors.lightBlue,
           onPrimary: Colors.white,
-          secondary: Color(0xFF3E497A),
+          secondary: Colors.lightBlue,
           onSecondary: Colors.white,
           error: Colors.red,
           onError: Colors.white,
-          background: Color(0xFF21325E),
+          background: Colors.blue,
           onBackground: Colors.white,
-          surface: Color(0xFF21325E),
-          onSurface: Colors.white,
+          surface: Colors.white,
+          onSurface: Colors.black,
         ),
+        appBarTheme: const AppBarTheme(
+            backgroundColor: Colors.blue, foregroundColor: Colors.white),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
-              Color(0xFFF1D00A),
+              Colors.blue,
             ),
-            foregroundColor: MaterialStateProperty.all(Colors.black),
+            foregroundColor: MaterialStateProperty.all(Colors.white),
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20),
