@@ -5,8 +5,8 @@ import 'package:taskplus/screens/Auth/signup_screen.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
 import 'package:taskplus/screens/Notes/notes_screen.dart';
 import 'package:taskplus/screens/Tasks/tasks_screen.dart';
-
-import 'package:taskplus/services/user_data.dart';
+import 'package:taskplus/screens/landing.dart';
+import 'package:taskplus/screens/splash_screen.dart';
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
@@ -55,35 +55,14 @@ class MainApp extends StatelessWidget {
           ),
         ),
       ),
-      home: FutureBuilder(
-        // Use a FutureBuilder to check if user data is present
-        future: UserData.getUserData(),
-        builder: (context, AsyncSnapshot<Map<String, dynamic>?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // Check if user data is available
-            if (snapshot.hasData && snapshot.data != null) {
-              // User data is present, navigate to the home screen or any other initial screen
-              return const HomeScreen();
-            } else {
-              // User data is not present, navigate to the login screen
-              return const LoginScreen();
-            }
-          } else {
-            // Future is still loading
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-        },
-      ),
+      home: Splash(),
       routes: {
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
         '/signup': (context) => const SignupScreen(),
         '/tasks': (context) => const TasksPage(),
         '/notes': (context) => const NotesScreen(),
+        '/landing': (context) => const Landing(),
       },
     );
   }
