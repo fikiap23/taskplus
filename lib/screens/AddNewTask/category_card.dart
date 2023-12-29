@@ -15,9 +15,8 @@ class Categorcard extends StatelessWidget {
         margin: EdgeInsets.all(5),
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: !this.isActive
-              ? Color.fromRGBO(221, 229, 249, 1)
-              : Color.fromRGBO(130, 0, 255, 1),
+          color:
+              !this.isActive ? Color.fromRGBO(221, 229, 249, 1) : Colors.blue,
           borderRadius: BorderRadius.all(Radius.circular(5)),
         ),
         child: Text(
