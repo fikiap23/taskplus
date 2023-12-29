@@ -67,6 +67,38 @@ class TaskService {
     }
   }
 
+  Future<List<Map<String, dynamic>>?> getTasksBySubject(
+      {String? subjectId}) async {
+    String apiUrl = '$baseUrl/$subjectId';
+    try {
+      String? token = await UserData.getToken();
+      final http.Response response = await http.get(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'auth-token': ' $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Successful retrieval of tasks
+        final List<dynamic> result = jsonDecode(response.body);
+        final List<Map<String, dynamic>> tasks =
+            List<Map<String, dynamic>>.from(result);
+        print(tasks);
+        return tasks;
+      } else {
+        // Handle error
+        print('Failed to get tasks. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return null;
+      }
+    } catch (error) {
+      print('Error during get tasks request: $error');
+      return null;
+    }
+  }
+
   Future<bool> deleteTask(String subjectId, String taskId) async {
     final String apiUrl = '$baseUrl/$subjectId/$taskId';
     try {

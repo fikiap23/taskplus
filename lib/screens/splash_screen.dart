@@ -24,7 +24,7 @@ class _SplashState extends State<Splash> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "Welcome To",
+              "TaskPlus ++",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
             ),
             Padding(
