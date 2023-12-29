@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:taskplus/screens/AddNewTask/SubjectList.dart';
+import 'package:taskplus/services/notif_service.dart';
 import 'package:taskplus/services/task_service.dart';
 
 class AddNewTask extends StatefulWidget {
@@ -17,7 +18,8 @@ class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Datecontroller;
   late TextEditingController _Time;
   bool isCreatingTask = false;
-
+  IntervalType _selectedIntervalType = IntervalType.minutes;
+  int _selectedIntervalValue = 1; // Default value, you can change it
   final TaskService _taskService = TaskService();
 
   DateTime SelectedDate = DateTime.now();
@@ -26,6 +28,7 @@ class _AddNewTaskState extends State<AddNewTask> {
   @override
   void initState() {
     super.initState();
+    // listenToNotifications();
     _Titlecontroller = TextEditingController();
     _DescriptionController = TextEditingController();
     _Datecontroller = TextEditingController(
@@ -35,6 +38,15 @@ class _AddNewTaskState extends State<AddNewTask> {
       text: '${DateFormat.Hm().format(DateTime.now())}',
     );
   }
+
+  //  to listen to any notification clicked or not
+  // listenToNotifications() {
+  //   print("Listening to notification");
+  //   LocalNotifications.onClickNotification.stream.listen((event) {
+  //     print(event);
+  //     Navigator.pushNamed(context, '/tasks', arguments: event);
+  //   });
+  // }
 
   _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
@@ -81,6 +93,16 @@ class _AddNewTaskState extends State<AddNewTask> {
       time.minute,
     );
     return combinedDateTime.toIso8601String();
+  }
+
+  DateTime combineDateAndTimeForNotification(DateTime date, TimeOfDay time) {
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
   }
 
   TimeOfDay _getTimeOfDay(String timeString) {
@@ -291,13 +313,66 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 100,
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Reminder Interval",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              children: [
+                                DropdownButton<IntervalType>(
+                                  value: _selectedIntervalType,
+                                  onChanged: (IntervalType? value) {
+                                    setState(() {
+                                      _selectedIntervalType = value!;
+                                    });
+                                  },
+                                  items: IntervalType.values
+                                      .map((IntervalType type) {
+                                    return DropdownMenuItem<IntervalType>(
+                                      value: type,
+                                      child:
+                                          Text(type.toString().split('.').last),
+                                    );
+                                  }).toList(),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _selectedIntervalValue =
+                                            int.parse(value);
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      labelText: "Value",
+                                      border: OutlineInputBorder(),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                       GestureDetector(
                         onTap: () async {
                           String combinedDateTime = combineDateAndTime(
                               SelectedDate, _getTimeOfDay(_Time.text));
+
+                          DateTime combinedDateTimeForNoti =
+                              combineDateAndTimeForNotification(
+                                  SelectedDate, _getTimeOfDay(_Time.text));
 
                           // Create a map with task details
                           Map<String, dynamic> taskData = {
@@ -314,11 +389,48 @@ class _AddNewTaskState extends State<AddNewTask> {
 
                           try {
                             // Call the createTask method
-                            await _taskService.createTask(
-                                taskData, selectedSubjectId);
+                            // await _taskService.createTask(
+                            //     taskData, selectedSubjectId);
 
-                            Navigator.pushNamedAndRemoveUntil(
-                                context, '/tasks', (route) => false);
+                            // LocalNotifications.showSimpleNotification(
+                            //     title: "Simple Notification",
+                            //     body: "This is a simple notification",
+                            //     payload: "This is simple data");
+
+                            // LocalNotifications.showPeriodicNotifications(
+                            //     title: "Periodic Notification",
+                            //     body: "This is a Periodic Notification",
+                            //     payload: "This is periodic data");
+
+                            // LocalNotifications.showScheduleNotification(
+                            //     title: "Schedule Notification",
+                            //     body: "This is a Schedule Notification",
+                            //     payload: "This is schedule data");
+
+                            // LocalNotifications.cancelAll();
+
+                            LocalNotifications.scheduleNotification(
+                              title: 'Judul Notifikasi',
+                              body: 'Isi notifikasi',
+                              payload: 'Payload notifikasi',
+                              deadline: DateTime.now().add(Duration(
+                                  minutes:
+                                      10)), // Batas waktu 1 hari dari sekarang
+                            );
+
+                            // LocalNotifications.showReminderNotification(
+                            //   title: 'Task Reminder',
+                            //   body: 'Don\'t forget to complete your task!',
+                            //   payload: 'task_id_123',
+                            //   intervalValue:
+                            //       _selectedIntervalValue, // use the selected value from your UI
+                            //   intervalType: _selectedIntervalType,
+                            //   deadline:
+                            //       combinedDateTimeForNoti, // use the selected type from your UI
+                            // );
+
+                            // Navigator.pushNamedAndRemoveUntil(
+                            //     context, '/tasks', (route) => false);
                             // print(_Time.text);
                             // print(combinedDateTime);
                           } finally {

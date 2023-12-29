@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:taskplus/main.dart';
 import 'package:taskplus/screens/Auth/login_screen.dart';
 import 'package:taskplus/screens/Auth/signup_screen.dart';
 import 'package:taskplus/screens/Home/home_screen.dart';
@@ -13,6 +14,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
