@@ -45,6 +45,8 @@ class LocalNotifications {
     required String body,
     required String payload,
     required DateTime deadline,
+    required ReminderFrequency frequency,
+    required int interval, // Tambahkan parameter interval
   }) async {
     Duration timeDifference = deadline.difference(DateTime.now());
     if (timeDifference.isNegative) {
@@ -54,10 +56,26 @@ class LocalNotifications {
     }
 
     tz.initializeTimeZones();
-
     tz.setLocalLocation(tz.local);
 
-    for (int i = 1; i <= timeDifference.inMinutes; i++) {
+    int minutesInInterval;
+    switch (frequency) {
+      case ReminderFrequency.minute:
+        minutesInInterval =
+            interval; // Menentukan interval langsung dalam menit
+        break;
+      case ReminderFrequency.hour:
+        minutesInInterval = interval * 60; // Ubah interval ke menit
+        break;
+      case ReminderFrequency.day:
+      default:
+        minutesInInterval = interval * 60 * 24; // Ubah interval ke menit
+        break;
+    }
+
+    print('Time difference: ${timeDifference.inMinutes}');
+
+    for (int i = 1; i <= timeDifference.inMinutes; i += minutesInInterval) {
       DateTime scheduledTime = deadline.subtract(Duration(minutes: i));
       tz.TZDateTime scheduledTimeLocal =
           tz.TZDateTime.from(scheduledTime, tz.local);
@@ -70,6 +88,8 @@ class LocalNotifications {
         importance: Importance.high,
         priority: Priority.high,
         ticker: 'task_ticker',
+        subText: "📌Task reminder ",
+        icon: 'taskplus_logo',
       );
       const NotificationDetails notificationDetails =
           NotificationDetails(android: androidNotificationDetails);
@@ -89,70 +109,6 @@ class LocalNotifications {
     }
   }
 
-  static Future showReminderNotification({
-    required String title,
-    required String body,
-    required String payload,
-    required DateTime deadline,
-    required int intervalValue,
-    required IntervalType intervalType,
-  }) async {
-    RepeatInterval repeatInterval = _getRepeatInterval(intervalType);
-
-    print('interval: $intervalType, $intervalValue');
-    print('repeatInterval: $repeatInterval');
-    print('deadline: $deadline');
-
-    // Calculate the time difference between current time and deadline
-    Duration timeDifference =
-        deadline.toLocal().difference(DateTime.now().toLocal());
-
-    print('timeDifference: $timeDifference');
-
-    if (timeDifference.isNegative) {
-      // Deadline has passed, cancel the notification
-      int reminderNotificationId = generateUniqueNotificationId();
-      print('Cancelling notification with id $reminderNotificationId');
-      await _flutterLocalNotificationsPlugin.cancel(reminderNotificationId);
-      return;
-    }
-
-    // Notification is scheduled to appear in the future
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(
-      'reminder_channel',
-      'Reminder Channel',
-      channelDescription: 'Channel for task reminders',
-      importance: Importance.high,
-      priority: Priority.high,
-      ticker: 'reminder_ticker',
-    );
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-
-    int reminderNotificationId = generateUniqueNotificationId();
-    print('Scheduling notification with id $reminderNotificationId');
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
-      reminderNotificationId,
-      title,
-      body,
-      repeatInterval,
-      notificationDetails,
-      payload: payload,
-    );
-  }
-
-  static RepeatInterval _getRepeatInterval(IntervalType intervalType) {
-    switch (intervalType) {
-      case IntervalType.minutes:
-        return RepeatInterval.everyMinute;
-      case IntervalType.hours:
-        return RepeatInterval.hourly;
-      case IntervalType.days:
-        return RepeatInterval.daily;
-    }
-  }
-
   static Future cancel(int id) async {
     await _flutterLocalNotificationsPlugin.cancel(id);
   }
@@ -162,8 +118,8 @@ class LocalNotifications {
   }
 }
 
-enum IntervalType {
-  minutes,
-  hours,
-  days,
+enum ReminderFrequency {
+  minute,
+  hour,
+  day,
 }

@@ -18,8 +18,6 @@ class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Datecontroller;
   late TextEditingController _Time;
   bool isCreatingTask = false;
-  IntervalType _selectedIntervalType = IntervalType.minutes;
-  int _selectedIntervalValue = 1; // Default value, you can change it
   final TaskService _taskService = TaskService();
 
   DateTime SelectedDate = DateTime.now();
@@ -38,15 +36,6 @@ class _AddNewTaskState extends State<AddNewTask> {
       text: '${DateFormat.Hm().format(DateTime.now())}',
     );
   }
-
-  //  to listen to any notification clicked or not
-  // listenToNotifications() {
-  //   print("Listening to notification");
-  //   LocalNotifications.onClickNotification.stream.listen((event) {
-  //     print(event);
-  //     Navigator.pushNamed(context, '/tasks', arguments: event);
-  //   });
-  // }
 
   _selectDate(BuildContext context) async {
     final DateTime? selected = await showDatePicker(
@@ -313,58 +302,6 @@ class _AddNewTaskState extends State<AddNewTask> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Reminder Interval",
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              children: [
-                                DropdownButton<IntervalType>(
-                                  value: _selectedIntervalType,
-                                  onChanged: (IntervalType? value) {
-                                    setState(() {
-                                      _selectedIntervalType = value!;
-                                    });
-                                  },
-                                  items: IntervalType.values
-                                      .map((IntervalType type) {
-                                    return DropdownMenuItem<IntervalType>(
-                                      value: type,
-                                      child:
-                                          Text(type.toString().split('.').last),
-                                    );
-                                  }).toList(),
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: TextFormField(
-                                    keyboardType: TextInputType.number,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _selectedIntervalValue =
-                                            int.parse(value);
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: "Value",
-                                      border: OutlineInputBorder(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
                       GestureDetector(
                         onTap: () async {
                           String combinedDateTime = combineDateAndTime(
@@ -389,50 +326,30 @@ class _AddNewTaskState extends State<AddNewTask> {
 
                           try {
                             // Call the createTask method
-                            // await _taskService.createTask(
-                            //     taskData, selectedSubjectId);
+                            Map<String, dynamic>? response = await _taskService
+                                .createTask(taskData, selectedSubjectId);
 
-                            // LocalNotifications.showSimpleNotification(
-                            //     title: "Simple Notification",
-                            //     body: "This is a simple notification",
-                            //     payload: "This is simple data");
-
-                            // LocalNotifications.showPeriodicNotifications(
-                            //     title: "Periodic Notification",
-                            //     body: "This is a Periodic Notification",
-                            //     payload: "This is periodic data");
-
-                            // LocalNotifications.showScheduleNotification(
-                            //     title: "Schedule Notification",
-                            //     body: "This is a Schedule Notification",
-                            //     payload: "This is schedule data");
-
-                            // LocalNotifications.cancelAll();
-
-                            LocalNotifications.scheduleNotification(
-                              title: 'Judul Notifikasi',
-                              body: 'Isi notifikasi',
-                              payload: 'Payload notifikasi',
-                              deadline: DateTime.now().add(Duration(
-                                  minutes:
-                                      10)), // Batas waktu 1 hari dari sekarang
-                            );
-
-                            // LocalNotifications.showReminderNotification(
-                            //   title: 'Task Reminder',
-                            //   body: 'Don\'t forget to complete your task!',
-                            //   payload: 'task_id_123',
-                            //   intervalValue:
-                            //       _selectedIntervalValue, // use the selected value from your UI
-                            //   intervalType: _selectedIntervalType,
-                            //   deadline:
-                            //       combinedDateTimeForNoti, // use the selected type from your UI
-                            // );
-
-                            // Navigator.pushNamedAndRemoveUntil(
-                            //     context, '/tasks', (route) => false);
-                            // print(_Time.text);
-                            // print(combinedDateTime);
+                            if (response != null) {
+                              LocalNotifications.scheduleNotification(
+                                title: taskData['title'],
+                                body: taskData['description'],
+                                payload: taskData['dueDate'],
+                                deadline: combinedDateTimeForNoti,
+                                frequency: ReminderFrequency
+                                    .minute, // Atur frekuensi pengingat
+                                interval:
+                                    1, // Atur interval waktu (dalam menit)
+                              );
+                              // print(response);
+                              // ignore: use_build_context_synchronously
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/tasks', (route) => false);
+                            } else {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text("Failed to create task"),
+                              ));
+                            }
                           } finally {
                             // Set the loading state to false, whether the task creation succeeds or fails
                             setState(() {
