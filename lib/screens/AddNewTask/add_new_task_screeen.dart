@@ -19,6 +19,19 @@ class _AddNewTaskState extends State<AddNewTask> {
   late TextEditingController _Time;
   bool isCreatingTask = false;
   final TaskService _taskService = TaskService();
+  ReminderFrequency frequency = ReminderFrequency.minute;
+  int interval = 1;
+
+  String selectedValue = '1 menit';
+  List<String> options = [
+    '1 menit',
+    '1 jam',
+    '3 jam',
+    '6 jam',
+    '12 jam',
+    '1 hari',
+    '2 hari'
+  ];
 
   DateTime SelectedDate = DateTime.now();
   String selectedSubjectId = '';
@@ -271,16 +284,94 @@ class _AddNewTaskState extends State<AddNewTask> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Reminder me every:',
+                        style: TextStyle(
+                            color: Colors.white), // warna teks untuk label
+                      ),
+                      SizedBox(height: 10),
+                      DropdownButton<String>(
+                        value: selectedValue,
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedValue = newValue!;
+
+                            switch (selectedValue) {
+                              case '1 menit':
+                                frequency = ReminderFrequency.minute;
+                                interval = 1;
+                                break;
+                              case '1 jam':
+                                frequency = ReminderFrequency.hour;
+                                interval = 1;
+                                break;
+                              case '3 jam':
+                                frequency = ReminderFrequency.hour;
+                                interval = 3;
+                                break;
+                              case '6 jam':
+                                frequency = ReminderFrequency.hour;
+                                interval = 6;
+                                break;
+                              case '12 jam':
+                                frequency = ReminderFrequency.hour;
+                                interval = 12;
+                                break;
+                              case '1 hari':
+                                frequency = ReminderFrequency.day;
+                                interval = 1;
+                                break;
+                              case '2 hari':
+                                frequency = ReminderFrequency.day;
+                                interval = 2;
+                                break;
+                              default:
+                                break;
+                            }
+                          });
+                        },
+                        items: options
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                  color: Colors
+                                      .white), // warna teks untuk opsi dropdown
+                            ),
+                          );
+                        }).toList(),
+                        style: TextStyle(
+                            color: Colors
+                                .white), // warna teks untuk teks terpilih dropdown
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        'Opsi yang dipilih: $selectedValue',
+                        style: TextStyle(
+                            color: Colors.white), // warna teks untuk teks hasil
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 40),
                   padding:
                       EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      )),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -329,16 +420,19 @@ class _AddNewTaskState extends State<AddNewTask> {
                             Map<String, dynamic>? response = await _taskService
                                 .createTask(taskData, selectedSubjectId);
 
+                            // Map<String, dynamic>? response = null;
+                            // print(frequency);
+                            // print(interval);
+
                             if (response != null) {
                               LocalNotifications.scheduleNotification(
                                 title: taskData['title'],
                                 body: taskData['description'],
                                 payload: taskData['dueDate'],
                                 deadline: combinedDateTimeForNoti,
-                                frequency: ReminderFrequency
-                                    .minute, // Atur frekuensi pengingat
-                                interval:
-                                    1, // Atur interval waktu (dalam menit)
+                                frequency:
+                                    frequency, // Atur frekuensi pengingat
+                                interval: interval, // Atur interval pengingat
                               );
                               // print(response);
                               // ignore: use_build_context_synchronously
