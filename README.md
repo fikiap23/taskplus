@@ -3,18 +3,21 @@
 Selamat datang di TaskPlus, mitra setia Anda dalam mengelola tugas dan meningkatkan produktivitas sehari-hari! TaskPlus adalah aplikasi canggih yang dirancang khusus untuk membantu Anda tetap teratur, fokus, dan sukses dalam menyelesaikan tugas-tugas penting Anda.
 
 ## Tim TaskPlus
-- 🌟 Nama Anggota Tim 1 (NIM)
-- 🌟 Nama Anggota Tim 2 (NIM)
-- 🌟 Nama Anggota Tim 3 (NIM)
+- 🌟 Fiki Aprian - 1217050058
+- 🌟 Muhammad Andhika Rizq Heryanto - 1217050087
+- 🌟 Muhammad Fauzan Irawan S - 1217050095
+- 🌟 Muhammad Naufal Muthahhari - 1217050099
+
 
 ## 🚀 Video Pitch Deck
-Jelajahi dunia TaskPlus melalui [Video Pitch Deck](insert_link_here) yang memukau. Temukan fitur unik yang membedakan TaskPlus dan lihat bagaimana ini mengubah cara pengguna mendekati manajemen tugas.
+Link Presentasi  Pitch deck:  [Link Video Pitch Deck](https://youtu.be/ZIKDuviHljk) 
 
 ## 🖥️ Repositori GitHub
-Telusuri inti TaskPlus di [GitHub](insert_link_here). Berkontribusi pada proyek sumber terbuka, jelajahi kode sumber, dan tetap terinformasi tentang pembaruan terbaru yang meningkatkan fungsionalitas TaskPlus.
+- Backend: [Repo backend](https://github.com/fikiap23/taskplus-backend.git)
+- Frontend/mobile: [Repo frontend](https://github.com/fikiap23/taskplus.git) 
 
 ## 📲 Unduh di Google Play
-Mulailah perjalanan produktivitas yang ditingkatkan! Unduh TaskPlus dari [Google Play](insert_link_here) untuk mengelola tugas, membuat catatan, dan menerima pengingat tepat waktu—semuanya dalam satu aplikasi intuitif.
+Mulailah perjalanan produktivitas yang ditingkatkan! Unduh TaskPlus dari [Google Play](https://play.google.com/store/apps/details?id=com.ifuinsgd.taskplus) untuk mengelola tugas, membuat catatan, dan menerima pengingat tepat waktu—semuanya dalam satu aplikasi intuitif.
 
 ### Tentang TaskPlus
 TaskPlus adalah solusi all-in-one untuk manajemen tugas dan pencatatan yang efisien. Ini mengintegrasikan fungsi keduanya dengan mulus dan berfungsi sebagai pengingat tugas yang handal, memastikan Anda tetap teratur dengan komitmen Anda.
