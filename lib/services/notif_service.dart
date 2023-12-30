@@ -3,6 +3,8 @@ import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'package:permission_handler/permission_handler.dart';
+
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -13,6 +15,9 @@ class LocalNotifications {
   }
 
   static Future init() async {
+    // Request notification permission
+    await _requestNotificationPermission();
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final DarwinInitializationSettings initializationSettingsDarwin =
@@ -32,6 +37,22 @@ class LocalNotifications {
       onDidReceiveNotificationResponse: onNotificationTap,
       onDidReceiveBackgroundNotificationResponse: onNotificationTap,
     );
+  }
+
+  static Future _requestNotificationPermission() async {
+    // Check if notification permission is already granted
+    PermissionStatus status = await Permission.notification.status;
+
+    if (status != PermissionStatus.granted) {
+      // If not granted, request permission
+      status = await Permission.notification.request();
+
+      if (status != PermissionStatus.granted) {
+        // Permission not granted. Handle accordingly.
+        print('Notification permission not granted');
+        // You can show a message to the user or take appropriate action.
+      }
+    }
   }
 
   static int generateUniqueNotificationId() {
@@ -87,6 +108,8 @@ class LocalNotifications {
         channelDescription: 'Channel for task notifications',
         importance: Importance.high,
         priority: Priority.high,
+        playSound: true,
+        sound: RawResourceAndroidNotificationSound('mixkit_urgen_loop'),
         ticker: 'task_ticker',
         subText: "📌Task reminder ",
         icon: 'taskplus_logo',

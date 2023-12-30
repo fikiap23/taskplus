@@ -1,4 +1,4 @@
-package com.example.taskplus
+package com.ifuinsgd.taskplus
 
 import io.flutter.embedding.android.FlutterActivity
 

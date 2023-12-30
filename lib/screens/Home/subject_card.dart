@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:taskplus/screens/Home/edit_subject_dialog.dart';
+import 'package:taskplus/screens/Home/task_subject_list.dart';
 import 'package:taskplus/services/subject_service.dart';
 
 class SubjectCard extends StatelessWidget {
@@ -44,27 +45,40 @@ class SubjectCard extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      subjectName,
-                      style: GoogleFonts.montserrat(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
+                GestureDetector(
+                  onTap: () {
+                    print("edit tapped");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TaskSubjectList(
+                          subjectID: subjectId,
+                        ),
                       ),
-                    ),
-                    Text(
-                      teacher,
-                      style: GoogleFonts.montserrat(
-                        color: Colors.grey,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
+                    );
+                  },
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        subjectName,
+                        style: GoogleFonts.montserrat(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    )
-                  ],
+                      Text(
+                        teacher,
+                        style: GoogleFonts.montserrat(
+                          color: Colors.grey,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 Expanded(child: Container()),
                 _buildPopupMenuButton(context),

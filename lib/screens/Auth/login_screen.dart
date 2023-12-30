@@ -28,7 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             children: [
-              const SizedBox(height: 100),
+              const SizedBox(height: 20),
+              Image.asset(
+                'assets/images/taskplus_logo.png',
+                height: 100,
+                width: 100,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 20),
               Text(
                 "Welcome to Taskplus",
                 style: Theme.of(context).textTheme.headlineMedium,
@@ -38,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "Login to your account",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 30),
               TextFormField(
                 style: const TextStyle(color: Colors.black),
                 controller: _loginController.controllerIdentifier,
